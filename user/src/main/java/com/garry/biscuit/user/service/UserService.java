@@ -7,7 +7,7 @@ import com.garry.biscuit.user.vo.UserQueryVo;
 
 /**
  * @author Garry
- * 2024-12-03 23:52
+ * 2024-12-04 00:06
  */
 public interface UserService {
     /**

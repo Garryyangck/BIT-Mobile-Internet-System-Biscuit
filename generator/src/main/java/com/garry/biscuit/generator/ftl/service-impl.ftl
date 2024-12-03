@@ -46,7 +46,7 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
             log.info("插入${tableNameCn}：{}", ${domain});
         } else { // 修改
             ${domain}.setUpdateTime(now);
-            ${domain}Mapper.updateByPrimaryKeySelective(${domain});
+            ${domain}Mapper.updateByExampleSelective(${domain}, new ${Domain}Example());
             log.info("修改${tableNameCn}：{}", ${domain});
         }
     }
@@ -73,6 +73,8 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
 
     @Override
     public void delete(Long id) {
-        ${domain}Mapper.deleteByPrimaryKey(id);
+        ${Domain}Example ${domain}Example = new ${Domain}Example();
+        ${domain}Example.createCriteria().andIdEqualTo(id);
+        ${domain}Mapper.deleteByExample(${domain}Example);
     }
 }
