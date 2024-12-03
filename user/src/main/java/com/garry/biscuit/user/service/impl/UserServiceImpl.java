@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
             log.info("插入用户：{}", user);
         } else { // 修改
             user.setUpdateTime(now);
-            userMapper.updateByPrimaryKeySelective(user);
+            userMapper.updateByExampleSelective(user, new UserExample());
             log.info("修改用户：{}", user);
         }
     }
@@ -73,6 +73,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        userMapper.deleteByPrimaryKey(id);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdEqualTo(id);
+        userMapper.deleteByExample(userExample);
     }
 }
