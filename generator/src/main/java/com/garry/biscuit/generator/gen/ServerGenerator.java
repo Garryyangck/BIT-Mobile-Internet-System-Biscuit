@@ -80,7 +80,7 @@ public class ServerGenerator {
             param.put("typeSet", typeSet);
             System.out.println("组装参数: " + JSONUtil.toJsonPrettyStr(param));
 
-            generateBackend(Domain, param, false);
+            generateBackend(Domain, param, true);
         }
     }
 
