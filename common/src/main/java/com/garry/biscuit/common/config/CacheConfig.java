@@ -24,7 +24,7 @@ import java.util.Map;
 @EnableCaching // 允许使用缓存
 public class CacheConfig {
 
-    private final String cacheFilePath = "common/src/main/java/garry/train/common/config/cache/";
+    private final String cacheFilePath = "common/src/main/java/com/garry/biscuit/common/config/cache/";
 
     private final String prefix = "train_cache:";
 

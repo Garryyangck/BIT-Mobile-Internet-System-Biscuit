@@ -172,7 +172,8 @@ public class DBUtil {
      * 获取一个数据库中所有表在 mybatis-generator 中 <table tableName="xxx_xxx" domainObjectName="XxxXxx"/> 的表示
      */
     public static void main(String[] args) throws Exception {
-        DBUtil.url = "jdbc:mysql://localhost:3306/train_business?characterEncoding=UTF-8&amp;autoReconnect=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai";
+        String databaseName = "biscuit_user";
+        DBUtil.url = "jdbc:mysql://localhost:3306/%s?characterEncoding=UTF-8&amp;autoReconnect=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai".formatted(databaseName);
         DBUtil.user = "root";
         DBUtil.password = "1234";
         Connection conn = getConnection();
@@ -180,7 +181,7 @@ public class DBUtil {
         ResultSet rs = stmt.executeQuery("show tables");
         if (rs != null) {
             while (rs.next()) {
-                String tableName = rs.getString("Tables_in_train_business");
+                String tableName = rs.getString("Tables_in_%s".formatted(databaseName));
                 String str = "<table tableName=\"%s\" domainObjectName=\"%s\"/>".formatted(tableName, DBUtil.lineToBigHump(tableName));
                 System.out.println(str);
             }

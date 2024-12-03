@@ -12,7 +12,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <!-- 生成的实体类添加toString()方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
@@ -23,26 +23,26 @@
 
         <!-- 配置数据源，需要根据自己的项目修改 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/train_member?characterEncoding=UTF-8&amp;autoReconnect=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai"
+                        connectionURL="jdbc:mysql://localhost:3306/biscuit_user?characterEncoding=UTF-8&amp;autoReconnect=true&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai"
                         userId="root"
                         password="1234">
         </jdbcConnection>
 
         <!-- domain类的位置 targetProject是相对pom.xml的路径-->
-        <javaModelGenerator targetProject="../member/src/main/java"
-                            targetPackage="garry.train.member.pojo"/>
+        <javaModelGenerator targetProject="../user/src/main/java"
+                            targetPackage="com.garry.biscuit.user.domain"/>
 
         <!-- mapper xml的位置 targetProject是相对pom.xml的路径 -->
-        <sqlMapGenerator targetProject="../member/src/main/resources"
+        <sqlMapGenerator targetProject="../user/src/main/resources"
                          targetPackage="mapper"/>
 
         <!-- mapper类的位置 targetProject是相对pom.xml的路径 -->
-        <javaClientGenerator targetProject="../member/src/main/java"
-                             targetPackage="garry.train.member.mapper"
+        <javaClientGenerator targetProject="../user/src/main/java"
+                             targetPackage="com.garry.biscuit.user.mapper"
                              type="XMLMAPPER"/>
 
-<!--        <table tableName="member" domainObjectName="Member"/>-->
-<!--        <table tableName="passenger" domainObjectName="Passenger"/>-->
-        <table tableName="ticket" domainObjectName="Ticket"/>
+        <!-- 配置要生成的表 -->
+        <table tableName="user" domainObjectName="User"/>
+
     </context>
 </generatorConfiguration>
