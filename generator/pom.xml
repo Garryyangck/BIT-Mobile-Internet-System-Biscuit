@@ -21,7 +21,7 @@
     <dependencies>
         <!--common-->
         <dependency>
-            <groupId>garry</groupId>
+            <groupId>com.garry</groupId>
             <artifactId>common</artifactId>
         </dependency>
 

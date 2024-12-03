@@ -13,6 +13,7 @@
         <module>common</module>
         <module>gateway</module>
         <module>generator</module>
+        <module>user</module>
     </modules>
 
     <!--配置信息-->
@@ -58,7 +59,7 @@
 
             <!--common-->
             <dependency>
-                <groupId>garry</groupId>
+                <groupId>com.garry</groupId>
                 <artifactId>common</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
