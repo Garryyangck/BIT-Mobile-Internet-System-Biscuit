@@ -7,8 +7,6 @@ import java.util.Date;
 
 public class RedisUtil {
 
-
-
     /**
      * 将 date 转换为 formatString
      * date 若为空，则转化为 *

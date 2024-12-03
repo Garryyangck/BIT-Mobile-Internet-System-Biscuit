@@ -1,6 +1,6 @@
-package com.garry.biscuit.common.config.cache;
+package com.garry.biscuit.common.config;
 
-import com.garry.biscuit.common.common.ErrorCode;
+import com.garry.biscuit.common.enums.ResponseEnum;
 import com.garry.biscuit.common.exception.BusinessException;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-@EnableCaching
+@EnableCaching // 允许使用缓存
 public class CacheConfig {
 
-    private final String cacheFilePath = "common/src/main/java/com/garry/springbootinittemplate/common/config/cache/";
+    private final String cacheFilePath = "common/src/main/java/garry/train/common/config/cache/";
 
-    private final String prefix = "redis_cache:";
+    private final String prefix = "train_cache:";
 
     private final Duration defaultExpireDuration = Duration.ofMinutes(10L); // 默认过期时间 10 分钟
 
@@ -66,7 +66,7 @@ public class CacheConfig {
                     .toList();
             noExpireCacheNames.addAll(lines);
         } catch (Exception e) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "缓存配置 cache 寻找热点方法文件失败");
+            throw new BusinessException(ResponseEnum.NO_EXPIRE_CACHE_NAME_READ_FAILED);
         }
 
         // 创建配置

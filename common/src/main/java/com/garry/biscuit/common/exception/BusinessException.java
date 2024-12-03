@@ -1,22 +1,16 @@
 package com.garry.biscuit.common.exception;
 
-
-import com.garry.biscuit.common.common.ErrorCode;
+import com.garry.biscuit.common.enums.ResponseEnum;
 
 public class BusinessException extends RuntimeException {
 
-    private final ErrorCode errorCode;
+    private final ResponseEnum responseEnum;
 
-    public BusinessException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
-    }
-    public BusinessException(ErrorCode errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
+    public BusinessException(ResponseEnum responseEnum) {
+        this.responseEnum = responseEnum;
     }
 
-    public ErrorCode getBaseResponse() {
-        return errorCode;
+    public ResponseEnum getResponseEnum() {
+        return responseEnum;
     }
 }

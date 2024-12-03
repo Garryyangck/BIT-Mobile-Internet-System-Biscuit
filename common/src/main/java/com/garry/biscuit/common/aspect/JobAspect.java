@@ -1,7 +1,7 @@
 package com.garry.biscuit.common.aspect;
 
 import cn.hutool.core.date.DateTime;
-import com.garry.biscuit.common.constant.CommonConstant;
+import com.garry.biscuit.common.consts.CommonConst;
 import com.garry.biscuit.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,14 +16,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class JobAspect {
 
-    @SuppressWarnings("AopLanguageInspection")
-    @Pointcut("execution(public * com.garry.springbootinittemplate.batch.job..*.*(..))")
+    @Pointcut("execution(public * com.garry.train.batch.job..*.*(..))")
     public void jobPointcut() {
     }
 
     @Around("jobPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        MDC.put(CommonConstant.LOG_ID, CommonUtil.generateUUID(CommonConstant.LOG_ID_LENGTH));
+        MDC.put(CommonConst.LOG_ID, CommonUtil.generateUUID(CommonConst.LOG_ID_LENGTH));
         String className = proceedingJoinPoint.getSignature().getDeclaringTypeName();
         className = className.substring(className.lastIndexOf(".") + 1);
         String methodName = proceedingJoinPoint.getSignature().getName();
@@ -36,7 +35,7 @@ public class JobAspect {
 
         DateTime end = DateTime.now();
         long e = System.currentTimeMillis();
-        log.info("------------- {} 结束时间: {}，用时: {} ms -------------\n", name, end, e - s);
+        log.info("------------- {} 结束时间: {}，用时: {} ms -------------", name, end, e - s);
 
         return result;
     }

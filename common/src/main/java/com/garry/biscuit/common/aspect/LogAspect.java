@@ -13,19 +13,22 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.net.URISyntaxException;
 
 @Slf4j
 @Aspect
 @Component
 public class LogAspect {
-
-    /**
-     * 日志中屏蔽的内容
-     */
     private final String[] excludeProperties = {};
 
     /**
@@ -40,8 +43,12 @@ public class LogAspect {
     public void controllerPointcut() {
     }
 
+    /**
+     * 前置通知
+     */
+    @SuppressWarnings("DuplicatedCode")
     @Before("controllerPointcut()")
-    public void doBefore(JoinPoint joinPoint) {
+    public void doBefore(JoinPoint joinPoint) throws URISyntaxException {
 
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -68,7 +75,6 @@ public class LogAspect {
             }
             arguments[i] = args[i];
         }
-
         // 排除字段，敏感字段或太长的字段不显示：身份证、手机号、邮箱、密码等
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludeFilter = filters.addFilter();
@@ -76,6 +82,9 @@ public class LogAspect {
         log.info("请求参数: {}", JSONObject.toJSONString(arguments, excludeFilter));
     }
 
+    /**
+     * 环绕通知
+     */
     @SuppressWarnings("DuplicatedCode")
     @Around("controllerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -90,5 +99,21 @@ public class LogAspect {
         log.info("------------- 结束 耗时：{} ms -------------\n", executeMills);
 
         return result;
+    }
+
+    private static String handlePathVariable(JoinPoint joinPoint, String fullApiPath) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Parameter[] parameters = method.getParameters();
+        for (Parameter parameter : parameters) {
+            Annotation[] annotations = parameter.getAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType() == PathVariable.class) {
+                    // 去掉最后一个 /xx
+                    fullApiPath = fullApiPath.substring(0, fullApiPath.lastIndexOf("/"));
+                }
+            }
+        }
+        return fullApiPath;
     }
 }

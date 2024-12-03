@@ -1,6 +1,6 @@
 package com.garry.biscuit.common.util;
 
-import com.garry.biscuit.common.constant.CommonConstant;
+import com.garry.biscuit.common.consts.CommonConst;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -49,6 +49,6 @@ public class PageUtil {
      * @param pageSize 每页的数量
      */
     public static <T> PageInfo<T> getPageInfo(List<T> list, int pageNum, int pageSize) {
-        return getPageInfo(list, pageNum, pageSize, CommonConstant.DEFAULT_NAVIGATE_PAGES);
+        return getPageInfo(list, pageNum, pageSize, CommonConst.DEFAULT_NAVIGATE_PAGES);
     }
 }
