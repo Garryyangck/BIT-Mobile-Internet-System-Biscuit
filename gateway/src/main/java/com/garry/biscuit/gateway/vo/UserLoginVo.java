@@ -1,4 +1,4 @@
-package com.garry.biscuit.common.vo;
+package com.garry.biscuit.gateway.vo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
