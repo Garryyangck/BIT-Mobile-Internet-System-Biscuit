@@ -1,4 +1,4 @@
-package com.garry.biscuit.gateway.util;
+package com.garry.biscuit.generator.util;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;

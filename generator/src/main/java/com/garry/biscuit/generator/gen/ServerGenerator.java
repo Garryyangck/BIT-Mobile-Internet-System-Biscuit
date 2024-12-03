@@ -1,9 +1,9 @@
-package com.garry.biscuit.gateway.gen;
+package com.garry.biscuit.generator.gen;
 
 import cn.hutool.json.JSONUtil;
-import com.garry.biscuit.gateway.util.DBUtil;
-import com.garry.biscuit.gateway.util.Field;
-import com.garry.biscuit.gateway.util.FreemarkerUtil;
+import com.garry.biscuit.generator.util.DBUtil;
+import com.garry.biscuit.generator.util.Field;
+import com.garry.biscuit.generator.util.FreemarkerUtil;
 import freemarker.template.TemplateException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

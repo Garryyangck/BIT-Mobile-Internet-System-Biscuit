@@ -1,4 +1,4 @@
-package com.garry.biscuit.gateway.util;
+package com.garry.biscuit.generator.util;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
