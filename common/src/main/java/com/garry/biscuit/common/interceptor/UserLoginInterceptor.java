@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Component
-public class UserInterceptor implements HandlerInterceptor {
+public class UserLoginInterceptor implements HandlerInterceptor {
     @Resource
     private HostHolder hostHolder;
 
@@ -25,9 +25,9 @@ public class UserInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info("------------- UserInterceptor 开始 -------------");
+        log.info("------------- UserLoginInterceptor 开始 -------------");
         String path = request.getContextPath() + request.getServletPath();
-        log.info("UserInterceptor 拦截路径 = {}", path);
+        log.info("UserLoginInterceptor 拦截路径 = {}", path);
         String token = request.getHeader("token");
         log.info("获取用户登录 token = {}", token);
         JSONObject loginUser = null;

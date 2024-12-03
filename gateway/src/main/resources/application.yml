@@ -1,0 +1,22 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    gateway:
+      routes: # 网关配置
+        - id: user
+          # uri: http://127.0.0.1:8081 # 写死
+          uri: lb://user # 使用 GatewayNacos 实现负载均衡，以后就算增加服务器，也可以不用改 gateway 的配置
+          predicates:
+            - Path=/user/** # 将所有以 user为前缀的请求(e.g. http://localhost:8080/user/hello)都转发到 http://127.0.0.1:8081
+      globalcors: # 允许跨域
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: # 允许所有来源
+              - "*"
+            allowed-headers: # 允许携带的头信息
+              - "*"
+            allowed-methods: # 允许的请求方式
+              - "*"
+            allow-credentials: true  # 是否允许携带 cookie
+            max-age: 3600  # 跨域检测的有效期，前端会发起一个 OPTION请求看接口是否可用，可用才会真正发起你的 POST | GET 请求
