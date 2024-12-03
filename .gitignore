@@ -32,6 +32,7 @@ build/
 .vscode/
 
 ### log ###
+log/
 *.log
 
 ### cmd ###
