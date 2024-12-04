@@ -1,14 +1,15 @@
 package com.garry.biscuit.user.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
- * 2024-12-04 00:06
+ * 2024-12-04 09:57
  */
 @Data
 public class UserQueryVo {
@@ -43,6 +44,11 @@ public class UserQueryVo {
      * 用户简介
      */
     private String userProfile;
+
+    /**
+     * 用户签名
+     */
+    private String userSignature;
 
     /**
      * 用户经验值

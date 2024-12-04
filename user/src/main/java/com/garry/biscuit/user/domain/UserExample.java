@@ -515,6 +515,76 @@ public class UserExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserSignatureIsNull() {
+            addCriterion("user_signature is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureIsNotNull() {
+            addCriterion("user_signature is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureEqualTo(String value) {
+            addCriterion("user_signature =", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureNotEqualTo(String value) {
+            addCriterion("user_signature <>", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureGreaterThan(String value) {
+            addCriterion("user_signature >", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureGreaterThanOrEqualTo(String value) {
+            addCriterion("user_signature >=", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureLessThan(String value) {
+            addCriterion("user_signature <", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureLessThanOrEqualTo(String value) {
+            addCriterion("user_signature <=", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureLike(String value) {
+            addCriterion("user_signature like", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureNotLike(String value) {
+            addCriterion("user_signature not like", value, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureIn(List<String> values) {
+            addCriterion("user_signature in", values, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureNotIn(List<String> values) {
+            addCriterion("user_signature not in", values, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureBetween(String value1, String value2) {
+            addCriterion("user_signature between", value1, value2, "userSignature");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserSignatureNotBetween(String value1, String value2) {
+            addCriterion("user_signature not between", value1, value2, "userSignature");
+            return (Criteria) this;
+        }
+
         public Criteria andUserExperienceIsNull() {
             addCriterion("user_experience is null");
             return (Criteria) this;

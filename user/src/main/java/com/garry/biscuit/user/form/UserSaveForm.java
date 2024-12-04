@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
- * 2024-12-04 00:06
+ * 2024-12-04 09:57
  */
 @Data
 public class UserSaveForm {
@@ -44,6 +44,11 @@ public class UserSaveForm {
      * 用户简介
      */
     private String userProfile;
+
+    /**
+     * 用户签名
+     */
+    private String userSignature;
 
     /**
      * 用户经验值
