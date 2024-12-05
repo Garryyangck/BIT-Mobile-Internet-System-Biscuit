@@ -29,6 +29,8 @@ public enum ResponseEnum {
 
     USER_USER_PASSWORD_ERROR(1003, "密码错误，登录失败"),
 
+    BUSINESS_FOLLOW_ALREADY_FOLLOWED(2001, "已经关注过该用户了"),
+
     ;
 
     private final Integer code;

@@ -13,16 +13,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.net.URISyntaxException;
 
 @Slf4j
@@ -99,21 +94,5 @@ public class LogAspect {
         log.info("------------- 结束 耗时：{} ms -------------\n", executeMills);
 
         return result;
-    }
-
-    private static String handlePathVariable(JoinPoint joinPoint, String fullApiPath) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        Parameter[] parameters = method.getParameters();
-        for (Parameter parameter : parameters) {
-            Annotation[] annotations = parameter.getAnnotations();
-            for (Annotation annotation : annotations) {
-                if (annotation.annotationType() == PathVariable.class) {
-                    // 去掉最后一个 /xx
-                    fullApiPath = fullApiPath.substring(0, fullApiPath.lastIndexOf("/"));
-                }
-            }
-        }
-        return fullApiPath;
     }
 }

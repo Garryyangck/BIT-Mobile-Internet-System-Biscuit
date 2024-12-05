@@ -1,5 +1,6 @@
 package com.garry.biscuit.business.service;
 
+import com.garry.biscuit.business.form.FollowFollowForm;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.business.form.FollowQueryForm;
 import com.garry.biscuit.business.form.FollowSaveForm;
@@ -26,4 +27,9 @@ public interface FollowService {
      * 根据 id 删除关注
      */
     void delete(Long id);
+
+    /**
+     * 关注
+     */
+    void follow(FollowFollowForm form);
 }

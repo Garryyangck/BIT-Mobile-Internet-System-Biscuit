@@ -3,6 +3,9 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import com.garry.biscuit.business.form.FollowFollowForm;
+import com.garry.biscuit.common.enums.ResponseEnum;
+import com.garry.biscuit.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.garry.biscuit.common.util.CommonUtil;
@@ -76,5 +79,21 @@ public class FollowServiceImpl implements FollowService {
         FollowExample followExample = new FollowExample();
         followExample.createCriteria().andIdEqualTo(id);
         followMapper.deleteByExample(followExample);
+    }
+
+    @Override
+    public void follow(FollowFollowForm form) {
+        // 查看是不是已经关注了
+        FollowExample followExample = new FollowExample();
+        followExample.createCriteria()
+                .andFromIdEqualTo(form.getFromId())
+                .andToIdEqualTo(form.getToId());
+        long count = followMapper.countByExample(followExample);
+        if (count > 0) {
+            throw new BusinessException(ResponseEnum.BUSINESS_FOLLOW_ALREADY_FOLLOWED);
+        }
+        // 插入关注
+        FollowSaveForm followSaveForm = BeanUtil.copyProperties(form, FollowSaveForm.class);
+        save(followSaveForm);
     }
 }

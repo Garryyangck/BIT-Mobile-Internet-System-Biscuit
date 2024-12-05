@@ -1,12 +1,12 @@
 package com.garry.biscuit.business.controller;
 
+import com.garry.biscuit.business.form.FollowFollowForm;
+import com.garry.biscuit.business.form.FollowQueryForm;
+import com.garry.biscuit.business.service.FollowService;
+import com.garry.biscuit.business.vo.FollowQueryVo;
 import com.garry.biscuit.common.util.HostHolder;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
-import com.garry.biscuit.business.form.FollowQueryForm;
-import com.garry.biscuit.business.form.FollowSaveForm;
-import com.garry.biscuit.business.service.FollowService;
-import com.garry.biscuit.business.vo.FollowQueryVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +24,9 @@ public class FollowController {
     @Resource
     private HostHolder hostHolder;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseVo save(@Valid @RequestBody FollowSaveForm form) {
-        followService.save(form);
+    @RequestMapping(value = "/follow", method = RequestMethod.POST)
+    public ResponseVo follow(@Valid @RequestBody FollowFollowForm form) {
+        followService.follow(form);
         return ResponseVo.success();
     }
 
