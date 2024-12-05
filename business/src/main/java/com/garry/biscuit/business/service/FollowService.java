@@ -1,10 +1,8 @@
 package com.garry.biscuit.business.service;
 
-import com.garry.biscuit.business.form.FollowFollowForm;
-import com.garry.biscuit.common.vo.PageVo;
-import com.garry.biscuit.business.form.FollowQueryForm;
-import com.garry.biscuit.business.form.FollowSaveForm;
+import com.garry.biscuit.business.form.*;
 import com.garry.biscuit.business.vo.FollowQueryVo;
+import com.garry.biscuit.common.vo.PageVo;
 
 /**
  * @author Garry
@@ -32,4 +30,14 @@ public interface FollowService {
      * 关注
      */
     void follow(FollowFollowForm form);
+
+    /**
+     * 查询粉丝数
+     */
+    Integer countFollower(FollowCountFollowerForm form);
+
+    /**
+     * 查询关注数
+     */
+    Integer countFollowee(FollowCountFolloweeForm form);
 }

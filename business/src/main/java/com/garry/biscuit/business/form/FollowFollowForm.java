@@ -13,7 +13,6 @@ public class FollowFollowForm {
     /**
      * 用户id
      */
-    @NotNull(message = "【用户id】不能为空")
     private Long fromId;
 
     /**

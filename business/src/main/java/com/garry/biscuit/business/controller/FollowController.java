@@ -1,11 +1,10 @@
 package com.garry.biscuit.business.controller;
 
+import com.garry.biscuit.business.form.FollowCountFolloweeForm;
+import com.garry.biscuit.business.form.FollowCountFollowerForm;
 import com.garry.biscuit.business.form.FollowFollowForm;
-import com.garry.biscuit.business.form.FollowQueryForm;
 import com.garry.biscuit.business.service.FollowService;
-import com.garry.biscuit.business.vo.FollowQueryVo;
 import com.garry.biscuit.common.util.HostHolder;
-import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -26,14 +25,23 @@ public class FollowController {
 
     @RequestMapping(value = "/follow", method = RequestMethod.POST)
     public ResponseVo follow(@Valid @RequestBody FollowFollowForm form) {
+        form.setFromId(hostHolder.getUserId());
         followService.follow(form);
         return ResponseVo.success();
     }
 
-    @RequestMapping(value = "/query-list", method = RequestMethod.GET)
-    public ResponseVo<PageVo<FollowQueryVo>> queryList(@Valid FollowQueryForm form) {
-        PageVo<FollowQueryVo> vo = followService.queryList(form);
-        return ResponseVo.success(vo);
+    @RequestMapping(value = "/count-follower", method = RequestMethod.GET)
+    public ResponseVo<Integer> countFollower(@Valid FollowCountFollowerForm form) {
+        form.setToId(hostHolder.getUserId());
+        Integer countFollower = followService.countFollower(form);
+        return ResponseVo.success(countFollower);
+    }
+
+    @RequestMapping(value = "/count-followee", method = RequestMethod.GET)
+    public ResponseVo<Integer> countFollowee(@Valid FollowCountFolloweeForm form) {
+        form.setFromId(hostHolder.getUserId());
+        Integer countFollowee = followService.countFollowee(form);
+        return ResponseVo.success(countFollowee);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)

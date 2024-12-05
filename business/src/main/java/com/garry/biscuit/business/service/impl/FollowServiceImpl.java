@@ -3,15 +3,13 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
-import com.garry.biscuit.business.form.FollowFollowForm;
+import com.garry.biscuit.business.form.*;
 import com.garry.biscuit.common.enums.ResponseEnum;
 import com.garry.biscuit.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.garry.biscuit.common.util.CommonUtil;
 import com.garry.biscuit.common.vo.PageVo;
-import com.garry.biscuit.business.form.FollowQueryForm;
-import com.garry.biscuit.business.form.FollowSaveForm;
 import com.garry.biscuit.business.mapper.FollowMapper;
 import com.garry.biscuit.business.domain.Follow;
 import com.garry.biscuit.business.domain.FollowExample;
@@ -95,5 +93,23 @@ public class FollowServiceImpl implements FollowService {
         // 插入关注
         FollowSaveForm followSaveForm = BeanUtil.copyProperties(form, FollowSaveForm.class);
         save(followSaveForm);
+    }
+
+    @Override
+    public Integer countFollower(FollowCountFollowerForm form) {
+        FollowExample followExample = new FollowExample();
+        followExample.createCriteria()
+                .andToIdEqualTo(form.getToId());
+        long count = followMapper.countByExample(followExample);
+        return (int) count;
+    }
+
+    @Override
+    public Integer countFollowee(FollowCountFolloweeForm form) {
+        FollowExample followExample = new FollowExample();
+        followExample.createCriteria()
+                .andToIdEqualTo(form.getFromId());
+        long count = followMapper.countByExample(followExample);
+        return (int) count;
     }
 }
