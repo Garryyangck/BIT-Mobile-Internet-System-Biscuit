@@ -14,23 +14,24 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class HostHolder {
-    private final ThreadLocal<UserLoginVo> members = new ThreadLocal<>();
 
-    public void setMember(UserLoginVo vo) {
-        members.set(vo);
+    private final ThreadLocal<UserLoginVo> users = new ThreadLocal<>();
+
+    public void setUser(UserLoginVo vo) {
+        users.set(vo);
     }
 
     public UserLoginVo getUser() {
-        return members.get();
+        return users.get();
     }
 
     public void remove() {
-        members.remove();
+        users.remove();
     }
 
     public Long getUserId() {
         try {
-            return members.get().getId();
+            return users.get().getId();
         } catch (Exception e) {
             log.error(ResponseEnum.HOSTHOLDER_NO_USER_FOUND.getMsg());
             throw new BusinessException(ResponseEnum.HOSTHOLDER_NO_USER_FOUND);

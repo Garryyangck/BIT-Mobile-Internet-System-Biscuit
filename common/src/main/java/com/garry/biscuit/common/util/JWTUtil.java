@@ -6,6 +6,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import com.garry.biscuit.common.consts.CommonConst;
+import com.garry.biscuit.common.vo.UserLoginVo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -18,10 +19,21 @@ public class JWTUtil {
     /**
      * 生成 JWT
      */
-    public static String createToken(Long id, String mobile) {
+    public static String createToken(UserLoginVo vo) {
         HashMap<String, Object> payload = new HashMap<>();
-        payload.put("id", id);
-        payload.put("mobile", mobile);
+        // 将除了 token 以外的所有 userLoginVo 字段存入
+        payload.put("id", vo.getId());
+        payload.put("userAccount", vo.getUserAccount());
+        payload.put("userPassword", vo.getUserPassword());
+        payload.put("userName", vo.getUserName());
+        payload.put("userAvatar", vo.getUserAvatar());
+        payload.put("userProfile", vo.getUserProfile());
+        payload.put("userSignature", vo.getUserSignature());
+        payload.put("userExperience", vo.getUserExperience());
+        payload.put("userLevel", vo.getUserLevel());
+        payload.put("userRole", vo.getUserRole());
+        payload.put("createTime", vo.getCreateTime());
+        payload.put("updateTime", vo.getUpdateTime());
 
         DateTime now = DateTime.now();
         DateTime expireTime = now.offsetNew(DateField.HOUR, CommonConst.JWT_EXPIRE_HOUR);
@@ -30,7 +42,7 @@ public class JWTUtil {
         payload.put(JWTPayload.NOT_BEFORE, now); // 生效时间
 
         String token = cn.hutool.jwt.JWTUtil.createToken(payload, key.getBytes());
-        log.info("已为手机号 {} 的用户生成 JWT: {}", mobile, token);
+        log.info("已为账号 {} 的用户生成 JWT: {}", vo.getUserAccount(), token);
         return token;
     }
 

@@ -1,4 +1,4 @@
-package com.garry.biscuit.common.vo;
+package com.garry.biscuit.user.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,8 +7,12 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @author Garry
+ * 2024-12-05 16:47
+ */
 @Data
-public class UserLoginVo {
+public class UserRegisterVo {
 
     /**
      * id
@@ -73,8 +77,4 @@ public class UserLoginVo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
-    /**
-     * JWT token
-     */
-    private String token;
 }

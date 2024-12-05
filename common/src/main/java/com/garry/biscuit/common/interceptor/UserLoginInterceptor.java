@@ -35,7 +35,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
             UserLoginVo userLoginVo = JSONUtil.toBean(loginUser, UserLoginVo.class);
             userLoginVo.setToken(token);
             log.info("当前登录用户：{}", userLoginVo);
-            hostHolder.setMember(userLoginVo);
+            hostHolder.setUser(userLoginVo);
         } else {
             log.info("{} 的 token 不存在或已过期", path);
             return false;
