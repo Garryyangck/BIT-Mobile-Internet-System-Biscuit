@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
@@ -11,6 +12,7 @@ import org.springframework.core.env.Environment;
 @SpringBootApplication
 @ComponentScan("com.garry.biscuit") // 由于Application类放到了config包下，它只能扫描和自己同包的类，因此需要新增ComponentScan注解让其扫描整个garry包下的类
 @MapperScan("com.garry.biscuit.business.mapper") // 扫描mybatis的代码
+@EnableFeignClients("com.garry.biscuit.business.feign") // 在此包下加载openfeign
 public class BusinessApplication {
     public static void main(String[] args)   {
         // 打印启动日志
