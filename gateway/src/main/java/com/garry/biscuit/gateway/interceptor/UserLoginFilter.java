@@ -30,15 +30,15 @@ public class UserLoginFilter implements GlobalFilter, Ordered {
 
         // 排除不需要过滤的接口
         if (path.contains("/hello")
-                || path.contains("/member/member/register")
-                || path.contains("/member/member/login")) {
+                || path.contains("/register")
+                || path.contains("/login")) {
             log.info("{} 不需要登录", path);
         } else {
             String token = exchange.getRequest().getHeaders().getFirst("token");
             log.info("用户登录验证开始，token = {}", token);
             if (StrUtil.isBlank(token) || !JWTUtil.validate(token)) {
                 log.info("token为空、无效或已过期");
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); // 401 状态码
                 log.info("------------- 结束 {} -------------\n", path);
                 return exchange.getResponse().setComplete();
             } else {
@@ -50,11 +50,11 @@ public class UserLoginFilter implements GlobalFilter, Ordered {
                         log.info("用户不是管理员，无权限访问");
                         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); // 401 状态码
                         log.info("------------- 结束 {} -------------\n", path);
+                        return exchange.getResponse().setComplete();
                     }
                 }
                 log.info("登录校验通过");
             }
-
         }
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
