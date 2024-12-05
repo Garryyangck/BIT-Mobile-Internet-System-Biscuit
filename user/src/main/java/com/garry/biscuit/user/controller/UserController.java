@@ -1,6 +1,7 @@
 package com.garry.biscuit.user.controller;
 
 import com.garry.biscuit.common.util.HostHolder;
+import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
 import com.garry.biscuit.common.vo.UserLoginVo;
 import com.garry.biscuit.user.domain.User;
@@ -13,7 +14,12 @@ import com.garry.biscuit.user.vo.UserModifyVo;
 import com.garry.biscuit.user.vo.UserRegisterVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author Garry
@@ -58,5 +64,14 @@ public class UserController {
         form.setId(hostHolder.getUserId()); // 设置当前用户id
         userService.increaseExperience(form);
         return ResponseVo.success();
+    }
+
+    /**
+     * 主要用于 openFeign 调用
+     */
+    @RequestMapping(value = "/query-users-by-ids", method = RequestMethod.GET)
+    public ResponseVo<PageVo<User>> queryUsersByIds(List<Long> ids, Integer pageNum, Integer pageSize) {
+        PageVo<User> vo = userService.queryUsersByIds(ids, pageNum, pageSize);
+        return ResponseVo.success(vo);
     }
 }

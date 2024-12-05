@@ -205,4 +205,16 @@ public class UserServiceImpl implements UserService {
         user.setUserExperience(user.getUserExperience() + form.getExperienceIncreaseEnum().getExperience());
         userMapper.updateByExampleSelective(user, userExample);
     }
+
+    @Override
+    public PageVo<User> queryUsersByIds(List<Long> ids, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andIdIn(ids);
+        List<User> users = userMapper.selectByExample(userExample);
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        PageVo<User> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+        return vo;
+    }
 }

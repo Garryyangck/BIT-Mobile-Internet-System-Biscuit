@@ -8,6 +8,8 @@ import com.garry.biscuit.user.vo.UserModifyVo;
 import com.garry.biscuit.user.vo.UserQueryVo;
 import com.garry.biscuit.user.vo.UserRegisterVo;
 
+import java.util.List;
+
 /**
  * @author Garry
  * 2024-12-04 09:57
@@ -57,4 +59,9 @@ public interface UserService {
      * 增加用户经验值
      */
     void increaseExperience(UserIncreaseExperienceForm form);
+
+    /**
+     * 根据 id 列表查询用户
+     */
+    PageVo<User> queryUsersByIds(List<Long> ids, Integer pageNum, Integer pageSize);
 }
