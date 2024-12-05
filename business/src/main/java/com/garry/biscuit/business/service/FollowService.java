@@ -29,15 +29,20 @@ public interface FollowService {
     /**
      * 关注
      */
-    void follow(FollowFollowForm form);
+    void follow(Long fromId, Long toId);
 
     /**
      * 查询粉丝数
      */
-    Integer countFollower(FollowCountFollowerForm form);
+    Integer countFollower(Long toId);
 
     /**
      * 查询关注数
      */
-    Integer countFollowee(FollowCountFolloweeForm form);
+    Integer countFollowee(Long fromId);
+
+    /**
+     * 取消关注
+     */
+    void cancelFollow(Long fromId, Long toId);
 }

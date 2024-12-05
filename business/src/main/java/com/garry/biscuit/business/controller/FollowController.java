@@ -1,13 +1,9 @@
 package com.garry.biscuit.business.controller;
 
-import com.garry.biscuit.business.form.FollowCountFolloweeForm;
-import com.garry.biscuit.business.form.FollowCountFollowerForm;
-import com.garry.biscuit.business.form.FollowFollowForm;
 import com.garry.biscuit.business.service.FollowService;
 import com.garry.biscuit.common.util.HostHolder;
 import com.garry.biscuit.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,30 +19,27 @@ public class FollowController {
     @Resource
     private HostHolder hostHolder;
 
-    @RequestMapping(value = "/follow", method = RequestMethod.POST)
-    public ResponseVo follow(@Valid @RequestBody FollowFollowForm form) {
-        form.setFromId(hostHolder.getUserId());
-        followService.follow(form);
+    @RequestMapping(value = "/follow/{toId}", method = RequestMethod.POST)
+    public ResponseVo follow(@PathVariable Long toId) {
+        followService.follow(hostHolder.getUserId(), toId);
         return ResponseVo.success();
     }
 
     @RequestMapping(value = "/count-follower", method = RequestMethod.GET)
-    public ResponseVo<Integer> countFollower(@Valid FollowCountFollowerForm form) {
-        form.setToId(hostHolder.getUserId());
-        Integer countFollower = followService.countFollower(form);
+    public ResponseVo<Integer> countFollower() {
+        Integer countFollower = followService.countFollower(hostHolder.getUserId());
         return ResponseVo.success(countFollower);
     }
 
     @RequestMapping(value = "/count-followee", method = RequestMethod.GET)
-    public ResponseVo<Integer> countFollowee(@Valid FollowCountFolloweeForm form) {
-        form.setFromId(hostHolder.getUserId());
-        Integer countFollowee = followService.countFollowee(form);
+    public ResponseVo<Integer> countFollowee() {
+        Integer countFollowee = followService.countFollowee(hostHolder.getUserId());
         return ResponseVo.success(countFollowee);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseVo delete(@PathVariable Long id) {
-        followService.delete(id);
+    @RequestMapping(value = "/cancel-follow/{toId}", method = RequestMethod.DELETE)
+    public ResponseVo delete(@PathVariable Long toId) {
+        followService.cancelFollow(hostHolder.getUserId(), toId);
         return ResponseVo.success();
     }
 }

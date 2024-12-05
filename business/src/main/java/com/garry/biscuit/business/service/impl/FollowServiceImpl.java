@@ -80,36 +80,53 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public void follow(FollowFollowForm form) {
+    public void follow(Long fromId, Long toId) {
         // 查看是不是已经关注了
         FollowExample followExample = new FollowExample();
         followExample.createCriteria()
-                .andFromIdEqualTo(form.getFromId())
-                .andToIdEqualTo(form.getToId());
+                .andFromIdEqualTo(fromId)
+                .andToIdEqualTo(toId);
         long count = followMapper.countByExample(followExample);
         if (count > 0) {
             throw new BusinessException(ResponseEnum.BUSINESS_FOLLOW_ALREADY_FOLLOWED);
         }
         // 插入关注
-        FollowSaveForm followSaveForm = BeanUtil.copyProperties(form, FollowSaveForm.class);
+        FollowSaveForm followSaveForm = new FollowSaveForm();
+        followSaveForm.setFromId(fromId);
+        followSaveForm.setToId(toId);
         save(followSaveForm);
     }
 
     @Override
-    public Integer countFollower(FollowCountFollowerForm form) {
+    public Integer countFollower(Long toId) {
         FollowExample followExample = new FollowExample();
         followExample.createCriteria()
-                .andToIdEqualTo(form.getToId());
+                .andToIdEqualTo(toId);
         long count = followMapper.countByExample(followExample);
         return (int) count;
     }
 
     @Override
-    public Integer countFollowee(FollowCountFolloweeForm form) {
+    public Integer countFollowee(Long fromId) {
         FollowExample followExample = new FollowExample();
         followExample.createCriteria()
-                .andToIdEqualTo(form.getFromId());
+                .andToIdEqualTo(fromId);
         long count = followMapper.countByExample(followExample);
         return (int) count;
+    }
+
+    @Override
+    public void cancelFollow(Long fromId, Long toId) {
+        // 查看是否没有关注
+        FollowExample followExample = new FollowExample();
+        followExample.createCriteria()
+                .andFromIdEqualTo(fromId)
+                .andToIdEqualTo(toId);
+        List<Follow> follows = followMapper.selectByExample(followExample);
+        if (follows.isEmpty()) {
+            throw new BusinessException(ResponseEnum.BUSINESS_FOLLOW_NOT_FOLLOWED);
+        }
+        // 删除关注
+        delete(follows.get(0).getId());
     }
 }

@@ -31,6 +31,8 @@ public enum ResponseEnum {
 
     BUSINESS_FOLLOW_ALREADY_FOLLOWED(2001, "已经关注过该用户了"),
 
+    BUSINESS_FOLLOW_NOT_FOLLOWED(2002, "未关注该用户，取消关注失败"),
+
     ;
 
     private final Integer code;
