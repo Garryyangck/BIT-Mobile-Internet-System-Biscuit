@@ -3,6 +3,7 @@ package com.garry.biscuit.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.garry.biscuit.common.enums.ResponseEnum;
 import com.garry.biscuit.common.enums.UserRoleEnum;
@@ -11,10 +12,15 @@ import com.garry.biscuit.common.util.CommonUtil;
 import com.garry.biscuit.common.util.JWTUtil;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.UserLoginVo;
+import com.garry.biscuit.user.domain.Token;
+import com.garry.biscuit.user.domain.TokenExample;
 import com.garry.biscuit.user.domain.User;
 import com.garry.biscuit.user.domain.UserExample;
+import com.garry.biscuit.user.enums.UserExperienceIncreaseEnum;
 import com.garry.biscuit.user.form.*;
+import com.garry.biscuit.user.mapper.TokenMapper;
 import com.garry.biscuit.user.mapper.UserMapper;
+import com.garry.biscuit.user.service.TokenService;
 import com.garry.biscuit.user.service.UserService;
 import com.garry.biscuit.user.vo.UserModifyVo;
 import com.garry.biscuit.user.vo.UserQueryVo;
@@ -25,6 +31,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +46,12 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private TokenService tokenService;
+
+    @Resource
+    private TokenMapper tokenMapper;
 
     @Override
     public void save(UserSaveForm form) {
@@ -141,8 +154,29 @@ public class UserServiceImpl implements UserService {
         UserLoginVo vo = BeanUtil.copyProperties(users.get(0), UserLoginVo.class);
         String token = JWTUtil.createToken(vo);
         vo.setToken(token);
+        // 检查最近的一次token是否是今天，不是则增加经验
+        TokenSaveForm tokenSaveForm = new TokenSaveForm();
+        TokenExample tokenExample = new TokenExample();
+        tokenExample.createCriteria()
+                .andUserIdEqualTo(vo.getId());
+        tokenExample.setOrderByClause("create_time desc");
+        List<Token> tokens = tokenMapper.selectByExample(tokenExample);
+        boolean flag = true;
+        if (CollUtil.isNotEmpty(tokens)) {
+            Date latestCreateTime = tokens.get(0).getCreateTime();
+            if (!DateUtil.isSameDay(latestCreateTime, new Date())) {
+                flag = false;
+            }
+        }
+        if (!flag) {
+            UserIncreaseExperienceForm userIncreaseExperienceForm = new UserIncreaseExperienceForm();
+            userIncreaseExperienceForm.setExperienceIncreaseEnum(UserExperienceIncreaseEnum.LOGIN);
+            increaseExperience(userIncreaseExperienceForm);
+        }
         // 将 token 存入数据库
-
+        tokenSaveForm.setUserId(vo.getId());
+        tokenSaveForm.setJwt(token);
+        tokenService.save(tokenSaveForm);
         return vo;
     }
 
