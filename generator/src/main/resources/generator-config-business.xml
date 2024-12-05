@@ -42,13 +42,13 @@
                              type="XMLMAPPER"/>
 
         <!-- 配置要生成的表 -->
-        <table tableName="category" domainObjectName="Category"/>
-        <table tableName="conversation" domainObjectName="Conversation"/>
-        <table tableName="follow" domainObjectName="Follow"/>
-        <table tableName="message" domainObjectName="Message"/>
-        <table tableName="preference" domainObjectName="Preference"/>
-        <table tableName="product" domainObjectName="Product"/>
-        <table tableName="star" domainObjectName="Star"/>
+<!--        <table tableName="category" domainObjectName="Category"/>-->
+<!--        <table tableName="conversation" domainObjectName="Conversation"/>-->
+<!--        <table tableName="follow" domainObjectName="Follow"/>-->
+<!--        <table tableName="message" domainObjectName="Message"/>-->
+<!--        <table tableName="preference" domainObjectName="Preference"/>-->
+<!--        <table tableName="product" domainObjectName="Product"/>-->
+<!--        <table tableName="star" domainObjectName="Star"/>-->
 
     </context>
 </generatorConfiguration>
