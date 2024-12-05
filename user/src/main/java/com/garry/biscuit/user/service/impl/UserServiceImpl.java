@@ -54,10 +54,12 @@ public class UserServiceImpl implements UserService {
                 throw new BusinessException(ResponseEnum.USER_USER_ACCOUNT_EXIST);
             }
             // 对Id、createTime、updateTime 重新赋值
-            user.setId(CommonUtil.getSnowflakeNextId());
+            long id = CommonUtil.getSnowflakeNextId();
+            user.setId(id);
             user.setCreateTime(now);
             user.setUpdateTime(now);
             // 可能还需要重新赋值其它的字段
+            user.setUserName("biscuit_" + id);
             user.setUserExperience(0L);
             user.setUserLevel(0);
             user.setUserRole(UserRoleEnum.USER.getCode());
