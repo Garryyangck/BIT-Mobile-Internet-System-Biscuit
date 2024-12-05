@@ -3,9 +3,12 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import com.garry.biscuit.business.feign.UserFeign;
 import com.garry.biscuit.business.form.*;
+import com.garry.biscuit.common.domain.User;
 import com.garry.biscuit.common.enums.ResponseEnum;
 import com.garry.biscuit.common.exception.BusinessException;
+import com.garry.biscuit.common.vo.ResponseVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.garry.biscuit.common.util.CommonUtil;
@@ -30,6 +33,9 @@ import java.util.List;
 public class FollowServiceImpl implements FollowService {
     @Resource
     private FollowMapper followMapper;
+
+    @Resource
+    private UserFeign userFeign;
 
     @Override
     public void save(FollowSaveForm form) {
@@ -128,5 +134,19 @@ public class FollowServiceImpl implements FollowService {
         }
         // 删除关注
         delete(follows.get(0).getId());
+    }
+
+    @Override
+    public PageVo<User> followees(FollowFolloweesForm form) {
+        FollowExample followExample = new FollowExample();
+        followExample.createCriteria()
+                .andFromIdEqualTo(form.getFromId());
+        PageHelper.startPage(form.getPageNum(), form.getPageSize());
+        List<Follow> follows = followMapper.selectByExample(followExample);
+        List<Long> ids = follows.stream()
+                .map(Follow::getToId)
+                .toList();
+        ResponseVo<PageVo<User>> responseVo = userFeign.queryUsersByIds(ids, form.getPageNum(), form.getPageSize());
+        return responseVo.getData();
     }
 }
