@@ -2,6 +2,7 @@ package com.garry.biscuit.business.service;
 
 import com.garry.biscuit.business.form.*;
 import com.garry.biscuit.business.vo.FollowQueryVo;
+import com.garry.biscuit.common.domain.User;
 import com.garry.biscuit.common.vo.PageVo;
 
 /**
@@ -45,4 +46,10 @@ public interface FollowService {
      * 取消关注
      */
     void cancelFollow(Long fromId, Long toId);
+
+    /**
+     * 查询关注的人
+     * 支持分页
+     */
+    PageVo<User> followees(FollowFolloweesForm form);
 }

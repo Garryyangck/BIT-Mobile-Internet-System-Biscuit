@@ -1,10 +1,17 @@
 package com.garry.biscuit.business.controller;
 
 import com.garry.biscuit.business.service.FollowService;
+import com.garry.biscuit.common.domain.User;
+import com.garry.biscuit.business.form.*;
 import com.garry.biscuit.common.util.HostHolder;
+import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Garry
@@ -41,5 +48,12 @@ public class FollowController {
     public ResponseVo delete(@PathVariable Long toId) {
         followService.cancelFollow(hostHolder.getUserId(), toId);
         return ResponseVo.success();
+    }
+
+    @RequestMapping(value = "/followees", method = RequestMethod.GET)
+    public ResponseVo<PageVo<User>> followees(@Valid FollowFolloweesForm form) {
+        form.setFromId(hostHolder.getUserId());
+        PageVo<User> vo = followService.followees(form);
+        return ResponseVo.success(vo);
     }
 }
