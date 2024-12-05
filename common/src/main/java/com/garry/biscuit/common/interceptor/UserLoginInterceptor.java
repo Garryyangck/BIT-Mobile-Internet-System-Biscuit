@@ -10,6 +10,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,6 +39,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
             hostHolder.setUser(userLoginVo);
         } else {
             log.info("{} 的 token 不存在或已过期", path);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
         return true;
