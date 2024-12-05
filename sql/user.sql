@@ -26,4 +26,4 @@ create table if not exists `token`
     `create_time` datetime(3) comment '新增时间',
     `update_time` datetime(3) comment '修改时间',
     primary key (`id`)
-) default charset = utf8mb4 comment '用户';
+) default charset = utf8mb4 comment 'token';

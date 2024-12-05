@@ -42,7 +42,7 @@
                              type="XMLMAPPER"/>
 
         <!-- 配置要生成的表 -->
-        <table tableName="token" domainObjectName="Token"/>
+<!--        <table tableName="token" domainObjectName="Token"/>-->
 <!--        <table tableName="user" domainObjectName="User"/>-->
 
     </context>
