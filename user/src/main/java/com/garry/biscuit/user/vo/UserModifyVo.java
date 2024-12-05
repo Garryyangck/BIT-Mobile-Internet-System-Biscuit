@@ -1,4 +1,4 @@
-package com.garry.biscuit.gateway.vo;
+package com.garry.biscuit.user.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,24 +7,18 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @author Garry
+ * 2024-12-05 20:58
+ */
 @Data
-public class UserLoginVo {
+public class UserModifyVo {
 
     /**
      * id
      */
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
-
-    /**
-     * 账号
-     */
-    private String userAccount;
-
-    /**
-     * 密码
-     */
-    private String userPassword;
 
     /**
      * 用户昵称
@@ -72,9 +66,4 @@ public class UserLoginVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
-
-    /**
-     * JWT token
-     */
-    private String token;
 }

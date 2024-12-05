@@ -14,7 +14,7 @@ import java.util.HashMap;
 @Slf4j
 public class JWTUtil {
 
-    private static final String key = "theBravestGarry20240201";
+    private static final String key = "biscuit";
 
     /**
      * 生成 JWT

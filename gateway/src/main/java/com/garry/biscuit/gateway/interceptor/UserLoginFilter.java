@@ -1,5 +1,6 @@
 package com.garry.biscuit.gateway.interceptor;
 
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -45,13 +46,13 @@ public class UserLoginFilter implements GlobalFilter, Ordered {
                     log.info("需要管理员");
                     JSONObject userObject = JWTUtil.getJSONObject(token);
                     UserLoginVo userLoginVo = JSONUtil.toBean(userObject, UserLoginVo.class);
-                    if (userLoginVo == null || !UserRoleEnum.ADMIN.getCode().equals(userLoginVo.getRole())) { // 判断用户角色是否为管理员
+                    if (ObjUtil.isNull(userLoginVo) || !UserRoleEnum.ADMIN.getCode().equals(userLoginVo.getUserRole())) { // 判断用户角色是否为管理员
                         log.info("用户不是管理员，无权限访问");
-                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); // 401 状态码
                         log.info("------------- 结束 {} -------------\n", path);
                     }
-                    log.info("登录校验通过");
                 }
+                log.info("登录校验通过");
             }
 
         }

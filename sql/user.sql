@@ -12,5 +12,7 @@ create table if not exists `user`
     `user_level`      int           not null default 1 comment '用户等级',
     `user_role`       int           not null default 0 comment '用户角色|枚举[UserRoleEnum]',
     `create_time`     datetime(3) comment '新增时间',
-    `update_time`     datetime(3) comment '修改时间'
+    `update_time`     datetime(3) comment '修改时间',
+    primary key (`id`),
+    unique key `user_account_unique` (`user_account`)
 ) default charset = utf8mb4 comment '用户';

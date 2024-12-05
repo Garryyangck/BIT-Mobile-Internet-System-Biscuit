@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JWTUtil {
 
-    private static final String key = "theBravestGarry20240201";
+    private static final String key = "biscuit";
 
     /**
      * 校验 token 是否有效

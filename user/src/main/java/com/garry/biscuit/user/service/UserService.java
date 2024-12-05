@@ -1,9 +1,10 @@
 package com.garry.biscuit.user.service;
 
 import com.garry.biscuit.common.vo.PageVo;
-import com.garry.biscuit.user.form.UserQueryForm;
-import com.garry.biscuit.user.form.UserRegisterForm;
-import com.garry.biscuit.user.form.UserSaveForm;
+import com.garry.biscuit.common.vo.UserLoginVo;
+import com.garry.biscuit.user.domain.User;
+import com.garry.biscuit.user.form.*;
+import com.garry.biscuit.user.vo.UserModifyVo;
 import com.garry.biscuit.user.vo.UserQueryVo;
 import com.garry.biscuit.user.vo.UserRegisterVo;
 
@@ -35,5 +36,20 @@ public interface UserService {
      */
     UserRegisterVo register(UserRegisterForm form);
 
+    /**
+     * 通过账号和密码登录
+     * 返回 JWT token
+     */
+    UserLoginVo login(UserLoginForm form);
 
+    /**
+     * 用户修改个人信息
+     * 不能修改账号和密码
+     */
+    UserModifyVo modify(UserModifyForm form);
+
+    /**
+     * 获取用户信息
+     */
+    User profile(Long id);
 }

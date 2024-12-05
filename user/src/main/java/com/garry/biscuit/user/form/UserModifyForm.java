@@ -1,34 +1,21 @@
-package com.garry.biscuit.user.vo;
+package com.garry.biscuit.user.form;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.Date;
 
 /**
  * @author Garry
- * 2024-12-05 16:47
+ * 2024-12-05 20:54
  */
 @Data
-public class UserLoginVo {
+public class UserModifyForm {
 
     /**
      * id
      */
-    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
-
-    /**
-     * 账号
-     */
-    private String userAccount;
-
-    /**
-     * 密码
-     */
-    private String userPassword;
 
     /**
      * 用户昵称
@@ -51,21 +38,6 @@ public class UserLoginVo {
     private String userSignature;
 
     /**
-     * 用户经验值
-     */
-    private Long userExperience;
-
-    /**
-     * 用户等级
-     */
-    private Integer userLevel;
-
-    /**
-     * 用户角色|枚举[UserRoleEnum]
-     */
-    private Integer userRole;
-
-    /**
      * 新增时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -76,9 +48,4 @@ public class UserLoginVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
-
-    /**
-     * JWT token
-     */
-    private String token;
 }

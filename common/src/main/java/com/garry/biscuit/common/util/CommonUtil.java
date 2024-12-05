@@ -1,12 +1,14 @@
 package com.garry.biscuit.common.util;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.garry.biscuit.common.consts.CommonConst;
 import com.garry.biscuit.common.vo.ResponseVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.DigestUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +31,16 @@ public class CommonUtil {
      */
     public static long getSnowflakeNextId() {
         return IdUtil.getSnowflake(CommonConst.WORKER_ID, CommonConst.DATACENTER_ID).nextId();
+    }
+
+    /**
+     * 使用 md5 加密添加 salt 后的密码，加密密码 32 位
+     */
+    public static String md5Encryption(String key) {
+        if (StrUtil.isBlank(key)) {
+            return null;
+        }
+        return DigestUtils.md5DigestAsHex(key.getBytes());
     }
 
     /**

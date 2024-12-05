@@ -21,7 +21,14 @@ public enum ResponseEnum {
 
     HOSTHOLDER_NO_USER_FOUND(4, "hostholder未找到user"),
 
-    NO_EXPIRE_CACHE_NAME_READ_FAILED(5, "no_expire_cache_name.txt文件读取异常")
+    NO_EXPIRE_CACHE_NAME_READ_FAILED(5, "no_expire_cache_name.txt文件读取异常"),
+
+    USER_USER_ACCOUNT_EXIST(1001, "账号已存在，注册失败"),
+
+    USER_USER_ACCOUNT_NOT_EXIST(1002, "该账号不存在，登录失败"),
+
+    USER_USER_PASSWORD_ERROR(1003, "密码错误，登录失败"),
+
     ;
 
     private final Integer code;

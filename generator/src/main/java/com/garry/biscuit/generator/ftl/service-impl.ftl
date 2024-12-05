@@ -41,8 +41,8 @@ public class ${Domain}ServiceImpl implements ${Domain}Service {
             ${domain}.setId(CommonUtil.getSnowflakeNextId());
             ${domain}.setCreateTime(now);
             ${domain}.setUpdateTime(now);
-            ${domain}Mapper.insert(${domain});
             // 可能还需要重新赋值其它的字段
+            ${domain}Mapper.insert(${domain});
             log.info("插入${tableNameCn}：{}", ${domain});
         } else { // 修改
             ${domain}.setUpdateTime(now);
