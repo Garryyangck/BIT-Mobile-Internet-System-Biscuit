@@ -16,3 +16,14 @@ create table if not exists `user`
     primary key (`id`),
     unique key `user_account_unique` (`user_account`)
 ) default charset = utf8mb4 comment '用户';
+
+drop table if exists `token`;
+create table if not exists `token`
+(
+    `id`          bigint       not null comment 'id',
+    `user_id`     bigint       not null comment '用户id',
+    `jwt`         varchar(256) not null comment 'JWT',
+    `create_time` datetime(3) comment '新增时间',
+    `update_time` datetime(3) comment '修改时间',
+    primary key (`id`)
+) default charset = utf8mb4 comment '用户';

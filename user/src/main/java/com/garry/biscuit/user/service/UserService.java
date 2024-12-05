@@ -52,4 +52,9 @@ public interface UserService {
      * 获取用户信息
      */
     User profile(Long id);
+
+    /**
+     * 增加用户经验值
+     */
+    void increaseExperience(UserIncreaseExperienceForm form);
 }

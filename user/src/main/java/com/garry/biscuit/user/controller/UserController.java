@@ -4,6 +4,7 @@ import com.garry.biscuit.common.util.HostHolder;
 import com.garry.biscuit.common.vo.ResponseVo;
 import com.garry.biscuit.common.vo.UserLoginVo;
 import com.garry.biscuit.user.domain.User;
+import com.garry.biscuit.user.form.UserIncreaseExperienceForm;
 import com.garry.biscuit.user.form.UserLoginForm;
 import com.garry.biscuit.user.form.UserModifyForm;
 import com.garry.biscuit.user.form.UserRegisterForm;
@@ -40,15 +41,22 @@ public class UserController {
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
-    public ResponseVo<UserModifyVo> save(@Valid @RequestBody UserModifyForm form) {
+    public ResponseVo<UserModifyVo> modify(@Valid @RequestBody UserModifyForm form) {
         form.setId(hostHolder.getUserId()); // 设置当前用户id
         UserModifyVo vo = userService.modify(form);
         return ResponseVo.success(vo);
     }
 
-    @RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
-    public ResponseVo<User> queryList(@PathVariable Long id) {
-        User user = userService.profile(id);
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public ResponseVo<User> profile() {
+        User user = userService.profile(hostHolder.getUserId());
         return ResponseVo.success(user);
+    }
+
+    @RequestMapping(value = "/increase-experience", method = RequestMethod.POST)
+    public ResponseVo increaseExperience(@Valid @RequestBody UserIncreaseExperienceForm form) {
+        form.setId(hostHolder.getUserId()); // 设置当前用户id
+        userService.increaseExperience(form);
+        return ResponseVo.success();
     }
 }

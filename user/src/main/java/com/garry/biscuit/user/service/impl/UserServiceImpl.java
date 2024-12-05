@@ -141,6 +141,8 @@ public class UserServiceImpl implements UserService {
         UserLoginVo vo = BeanUtil.copyProperties(users.get(0), UserLoginVo.class);
         String token = JWTUtil.createToken(vo);
         vo.setToken(token);
+        // 将 token 存入数据库
+
         return vo;
     }
 
@@ -158,5 +160,15 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria()
                 .andIdEqualTo(id);
         return userMapper.selectByExample(userExample).get(0);
+    }
+
+    @Override
+    public void increaseExperience(UserIncreaseExperienceForm form) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andIdEqualTo(form.getId());
+        User user = userMapper.selectByExample(userExample).get(0);
+        user.setUserExperience(user.getUserExperience() + form.getExperienceIncreaseEnum().getExperience());
+        userMapper.updateByExampleSelective(user, userExample);
     }
 }
