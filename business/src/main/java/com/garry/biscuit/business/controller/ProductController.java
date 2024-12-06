@@ -1,15 +1,18 @@
 package com.garry.biscuit.business.controller;
 
+import com.garry.biscuit.business.form.ProductRecommendForm;
+import com.garry.biscuit.business.form.ProductSaveForm;
+import com.garry.biscuit.business.service.ProductService;
+import com.garry.biscuit.business.vo.ProductRecommendVo;
 import com.garry.biscuit.common.util.HostHolder;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
-import com.garry.biscuit.business.form.ProductQueryForm;
-import com.garry.biscuit.business.form.ProductSaveForm;
-import com.garry.biscuit.business.service.ProductService;
-import com.garry.biscuit.business.vo.ProductQueryVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Garry
@@ -34,9 +37,14 @@ public class ProductController {
         return ResponseVo.success();
     }
 
-    @RequestMapping(value = "/query-list", method = RequestMethod.GET)
-    public ResponseVo<PageVo<ProductQueryVo>> queryList(@Valid ProductQueryForm form) {
-        PageVo<ProductQueryVo> vo = productService.queryList(form);
+    /**
+     * 主页给用户推荐商品
+     */
+    @RequestMapping(value = "/recommend", method = RequestMethod.GET)
+    public ResponseVo<PageVo<ProductRecommendVo>> recommend(@Valid ProductRecommendForm form) {
+        form.setUserId(hostHolder.getUserId());
+        PageVo<ProductRecommendVo> vo = productService.recommend(form);
         return ResponseVo.success(vo);
     }
+
 }
