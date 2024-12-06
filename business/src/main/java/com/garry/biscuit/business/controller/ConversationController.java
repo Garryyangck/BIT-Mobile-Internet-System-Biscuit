@@ -24,8 +24,12 @@ public class ConversationController {
     @Resource
     private HostHolder hostHolder;
 
+    /**
+     * 创建对话，只能买家在购买商品页面与卖家创建对话，因此buyer是当前用户
+     */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseVo save(@Valid @RequestBody ConversationSaveForm form) {
+        form.setBuyerId(hostHolder.getUserId());
         conversationService.save(form);
         return ResponseVo.success();
     }
@@ -36,11 +40,5 @@ public class ConversationController {
         form.setUserRole(hostHolder.getUser().getUserRole());
         PageVo<ConversationQueryVo> vo = conversationService.queryList(form);
         return ResponseVo.success(vo);
-    }
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseVo delete(@PathVariable Long id) {
-        conversationService.delete(id);
-        return ResponseVo.success();
     }
 }
