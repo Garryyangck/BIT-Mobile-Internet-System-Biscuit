@@ -1,11 +1,12 @@
 package com.garry.biscuit.business.form;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
@@ -22,7 +23,6 @@ public class ProductSaveForm {
     /**
      * 卖家id
      */
-    @NotNull(message = "【卖家id】不能为空")
     private Long sellerId;
 
     /**

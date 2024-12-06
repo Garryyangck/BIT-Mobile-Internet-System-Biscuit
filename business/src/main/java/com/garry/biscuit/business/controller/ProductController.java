@@ -24,8 +24,12 @@ public class ProductController {
     @Resource
     private HostHolder hostHolder;
 
+    /**
+     * 创建商品或编辑商品，自己是卖家
+     */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseVo save(@Valid @RequestBody ProductSaveForm form) {
+        form.setSellerId(hostHolder.getUser().getId());
         productService.save(form);
         return ResponseVo.success();
     }
@@ -34,11 +38,5 @@ public class ProductController {
     public ResponseVo<PageVo<ProductQueryVo>> queryList(@Valid ProductQueryForm form) {
         PageVo<ProductQueryVo> vo = productService.queryList(form);
         return ResponseVo.success(vo);
-    }
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseVo delete(@PathVariable Long id) {
-        productService.delete(id);
-        return ResponseVo.success();
     }
 }
