@@ -74,4 +74,13 @@ public class UserController {
         PageVo<User> vo = userService.queryUsersByIds(ids, pageNum, pageSize);
         return ResponseVo.success(vo);
     }
+
+    /**
+     * 主要用于 openFeign 调用
+     */
+    @RequestMapping(value = "/query-user-by-id", method = RequestMethod.GET)
+    public ResponseVo<User> queryUserById(Long id) {
+        User user = userService.profile(id);
+        return ResponseVo.success(user);
+    }
 }

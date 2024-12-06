@@ -19,6 +19,8 @@ public interface ConversationService {
 
     /**
      * 查询所有的聊天，支持分页
+     * 最后一条消息，消息的时间，对方的头像，对方的名字，商品的图片，未读消息数量
+     * 如果 userId 是用户就用 ConversationUserQueryVo
      */
     PageVo<ConversationQueryVo> queryList(ConversationQueryForm form);
 

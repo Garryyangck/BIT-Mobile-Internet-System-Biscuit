@@ -32,6 +32,8 @@ public class ConversationController {
 
     @RequestMapping(value = "/query-list", method = RequestMethod.GET)
     public ResponseVo<PageVo<ConversationQueryVo>> queryList(@Valid ConversationQueryForm form) {
+        form.setUserId(hostHolder.getUserId());
+        form.setUserRole(hostHolder.getUser().getUserRole());
         PageVo<ConversationQueryVo> vo = conversationService.queryList(form);
         return ResponseVo.success(vo);
     }

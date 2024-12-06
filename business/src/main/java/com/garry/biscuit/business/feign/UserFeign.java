@@ -18,4 +18,7 @@ public interface UserFeign {
 
     @GetMapping("/user/user/query-users-by-ids")
     ResponseVo<PageVo<User>> queryUsersByIds(@RequestParam("ids") List<Long> ids, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
+
+    @GetMapping("/user/user/query-user-by-id")
+    ResponseVo<User> queryUserById(@RequestParam("id") Long id);
 }

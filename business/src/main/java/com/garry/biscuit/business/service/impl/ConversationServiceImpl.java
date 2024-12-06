@@ -3,6 +3,13 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import com.garry.biscuit.business.domain.MessageExample;
+import com.garry.biscuit.business.feign.UserFeign;
+import com.garry.biscuit.business.mapper.MessageMapper;
+import com.garry.biscuit.business.vo.ConversationUserQueryVo;
+import com.garry.biscuit.common.domain.User;
+import com.garry.biscuit.common.enums.UserRoleEnum;
+import com.garry.biscuit.common.vo.ResponseVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.garry.biscuit.common.util.CommonUtil;
@@ -30,6 +37,12 @@ public class ConversationServiceImpl implements ConversationService {
     @Resource
     private ConversationMapper conversationMapper;
 
+    @Resource
+    private MessageMapper messageMapper;
+
+    @Resource
+    private UserFeign userFeign;
+
     @Override
     public void save(ConversationSaveForm form) {
         Conversation conversation = BeanUtil.copyProperties(form, Conversation.class);
@@ -53,22 +66,46 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public PageVo<ConversationQueryVo> queryList(ConversationQueryForm form) {
-        ConversationExample conversationExample = new ConversationExample();
-        conversationExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
-        // 这里自定义一些过滤的条件，比如:
-//        // 用户只能查自己 userId 下的聊天
-//        ConversationExample.Criteria criteria = conversationExample.createCriteria();
-//        if (ObjectUtil.isNotNull(form.getUserId()) {
-//            criteria.andUserIdEqualTo(form.getUserId());
-//        }
-        PageHelper.startPage(form.getPageNum(), form.getPageSize());
-        List<Conversation> conversations = conversationMapper.selectByExample(conversationExample);
-        PageInfo<Conversation> pageInfo = new PageInfo<>(conversations);
-        List<ConversationQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), ConversationQueryVo.class);
-        PageVo<ConversationQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
-        vo.setList(voList);
-        vo.setMsg("查询聊天列表成功");
-        return vo;
+        if (UserRoleEnum.ADMIN.getCode().equals(form.getUserRole())) {
+            ConversationExample conversationExample = new ConversationExample();
+            conversationExample.setOrderByClause("id desc");
+            PageHelper.startPage(form.getPageNum(), form.getPageSize());
+            List<Conversation> conversations = conversationMapper.selectByExample(conversationExample);
+            PageInfo<Conversation> pageInfo = new PageInfo<>(conversations);
+            List<ConversationQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), ConversationQueryVo.class);
+            PageVo<ConversationQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+            vo.setList(voList);
+            vo.setMsg("查询聊天列表成功");
+            return vo;
+        } else if (UserRoleEnum.USER.getCode().equals(form.getUserRole())) { // 普通用户只能查询自己有关的聊天
+            ConversationExample conversationExample = new ConversationExample();
+            conversationExample.createCriteria().andSellerIdEqualTo(form.getUserId());
+            conversationExample.or().andBuyerIdEqualTo(form.getUserId()); // WHERE seller_id = ? OR buyer_id = ?
+            conversationExample.setOrderByClause("id desc");
+            PageHelper.startPage(form.getPageNum(), form.getPageSize());
+            List<Conversation> conversations = conversationMapper.selectByExample(conversationExample);
+            PageInfo<Conversation> pageInfo = new PageInfo<>(conversations);
+            List<ConversationUserQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), ConversationUserQueryVo.class);
+            // 为 voList 的每一个元素独特的字段赋值
+            ConversationUserQueryVo vo1 = new ConversationUserQueryVo();
+            vo1.setLastMessage();
+            vo1.setLastMessageTime();
+            for (ConversationUserQueryVo vo : voList) {
+                // 添加用户名字和头像
+                Long chatterId = vo.getSellerId().equals(form.getUserId()) ? vo.getBuyerId() : vo.getSellerId();
+                ResponseVo<User> userResponseVo = userFeign.queryUserById(chatterId);
+                vo.setChatterName(userResponseVo.getData().getUserName());
+                vo.setChatterAvatar(userResponseVo.getData().getUserAvatar());
+                // 添加Message
+                MessageExample messageExample = new MessageExample();
+                messageExample.createCriteria().andIsReadEqualTo(0);
+                long count = messageMapper.countByExample(messageExample);
+                vo.setUnreadCount((int) count);
+                messageExample = new MessageExample();
+                // where
+                messageExample.createCriteria().andProductIdEqualTo(vo.getProductId());
+            }
+        }
     }
 
     @Override
