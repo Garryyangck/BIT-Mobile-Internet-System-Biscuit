@@ -21,7 +21,6 @@ public class MessageSaveForm {
     /**
      * 发出者id
      */
-    @NotNull(message = "【发出者id】不能为空")
     private Long fromId;
 
     /**

@@ -42,6 +42,7 @@ public class MessageServiceImpl implements MessageService {
             message.setCreateTime(now);
             message.setUpdateTime(now);
             // 可能还需要重新赋值其它的字段
+            message.setIsRead(0);
             messageMapper.insert(message);
             log.info("插入消息：{}", message);
         } else { // 修改

@@ -26,6 +26,7 @@ public class MessageController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseVo save(@Valid @RequestBody MessageSaveForm form) {
+        form.setFromId(hostHolder.getUserId());
         messageService.save(form);
         return ResponseVo.success();
     }
