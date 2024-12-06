@@ -33,6 +33,10 @@ public enum ResponseEnum {
 
     BUSINESS_FOLLOW_NOT_FOLLOWED(2002, "未关注该用户，取消关注失败"),
 
+    Business_STAR_ALREADY_EXIST(3001, "已经收藏该商品，无法重复收藏"),
+
+    Business_STAR_NOT_EXIST(3002, "未收藏该商品，取消收藏失败"),
+
     ;
 
     private final Integer code;

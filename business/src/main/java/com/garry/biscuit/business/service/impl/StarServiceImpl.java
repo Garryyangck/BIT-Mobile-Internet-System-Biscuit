@@ -3,17 +3,23 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.garry.biscuit.common.util.CommonUtil;
-import com.garry.biscuit.common.vo.PageVo;
-import com.garry.biscuit.business.form.StarQueryForm;
-import com.garry.biscuit.business.form.StarSaveForm;
-import com.garry.biscuit.business.mapper.StarMapper;
+import com.garry.biscuit.business.domain.Product;
+import com.garry.biscuit.business.domain.ProductExample;
 import com.garry.biscuit.business.domain.Star;
 import com.garry.biscuit.business.domain.StarExample;
+import com.garry.biscuit.business.form.StarQueryForm;
+import com.garry.biscuit.business.form.StarSaveForm;
+import com.garry.biscuit.business.form.StarStarsForm;
+import com.garry.biscuit.business.mapper.ProductMapper;
+import com.garry.biscuit.business.mapper.StarMapper;
 import com.garry.biscuit.business.service.StarService;
 import com.garry.biscuit.business.vo.StarQueryVo;
+import com.garry.biscuit.common.enums.ResponseEnum;
+import com.garry.biscuit.common.exception.BusinessException;
+import com.garry.biscuit.common.util.CommonUtil;
+import com.garry.biscuit.common.vo.PageVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +35,9 @@ import java.util.List;
 public class StarServiceImpl implements StarService {
     @Resource
     private StarMapper starMapper;
+
+    @Resource
+    private ProductMapper productMapper;
 
     @Override
     public void save(StarSaveForm form) {
@@ -76,5 +85,64 @@ public class StarServiceImpl implements StarService {
         StarExample starExample = new StarExample();
         starExample.createCriteria().andIdEqualTo(id);
         starMapper.deleteByExample(starExample);
+    }
+
+    @Override
+    public void star(Long userId, Long productId) {
+        // 查看是不是已经收藏
+        StarExample starExample = new StarExample();
+        starExample.createCriteria()
+                .andUserIdEqualTo(userId)
+                .andProductIdEqualTo(productId);
+        List<Star> stars = starMapper.selectByExample(starExample);
+        if (!stars.isEmpty()) {
+            throw new BusinessException(ResponseEnum.Business_STAR_ALREADY_EXIST);
+        }
+        // 插入收藏
+        StarSaveForm starSaveForm = new StarSaveForm();
+        starSaveForm.setUserId(userId);
+        starSaveForm.setProductId(productId);
+        save(starSaveForm);
+    }
+
+    @Override
+    public void cancelStar(Long userId, Long productId) {
+        // 查看是不是已经收藏
+        StarExample starExample = new StarExample();
+        starExample.createCriteria()
+                .andUserIdEqualTo(userId)
+                .andProductIdEqualTo(productId);
+        List<Star> stars = starMapper.selectByExample(starExample);
+        if (stars.isEmpty()) {
+            throw new BusinessException(ResponseEnum.Business_STAR_NOT_EXIST);
+        }
+        // 删除收藏
+        delete(stars.get(0).getId());
+    }
+
+    @Override
+    public Integer countStar(Long userId) {
+        StarExample starExample = new StarExample();
+        starExample.createCriteria().andUserIdEqualTo(userId);
+        long count = starMapper.countByExample(starExample);
+        return (int) count;
+    }
+
+    @Override
+    public PageVo<Product> stars(StarStarsForm form) {
+        StarExample starExample = new StarExample();
+        starExample.createCriteria().andUserIdEqualTo(form.getUserId());
+        PageHelper.startPage(form.getPageNum(), form.getPageSize());
+        List<Star> stars = starMapper.selectByExample(starExample);
+        List<Long> productIds = stars.stream()
+                .map(Star::getProductId)
+                .toList();
+        ProductExample productExample = new ProductExample();
+        productExample.createCriteria().andIdIn(productIds);
+        PageHelper.startPage(form.getPageNum(), form.getPageSize());
+        List<Product> products = productMapper.selectByExample(productExample);
+        PageInfo<Product> pageInfo = new PageInfo<>(products);
+        PageVo<Product> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+        return vo;
     }
 }
