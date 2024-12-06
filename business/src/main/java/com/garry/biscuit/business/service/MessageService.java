@@ -18,7 +18,8 @@ public interface MessageService {
     void save(MessageSaveForm form);
 
     /**
-     * 查询所有的消息，支持分页
+     * 查询当前聊天室所有的消息，支持分页
+     * 如果用户为管理员则返回全部消息分页的结果
      */
     PageVo<MessageQueryVo> queryList(MessageQueryForm form);
 

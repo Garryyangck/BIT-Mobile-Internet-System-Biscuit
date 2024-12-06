@@ -32,6 +32,7 @@ public class MessageAdminController {
 
     @RequestMapping(value = "/query-list", method = RequestMethod.GET)
     public ResponseVo<PageVo<MessageQueryVo>> queryList(@Valid MessageQueryForm form) {
+        form.setUserRole(hostHolder.getUser().getUserRole());
         PageVo<MessageQueryVo> vo = messageService.queryList(form);
         return ResponseVo.success(vo);
     }

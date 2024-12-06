@@ -2,7 +2,11 @@ package com.garry.biscuit.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.garry.biscuit.common.enums.ResponseEnum;
+import com.garry.biscuit.common.enums.UserRoleEnum;
+import com.garry.biscuit.common.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.garry.biscuit.common.util.CommonUtil;
@@ -54,22 +58,35 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public PageVo<MessageQueryVo> queryList(MessageQueryForm form) {
-        MessageExample messageExample = new MessageExample();
-        messageExample.setOrderByClause("update_time desc"); // 最新更新的数据，最先被查出来
-        // 这里自定义一些过滤的条件，比如:
-//        // 用户只能查自己 userId 下的消息
-//        MessageExample.Criteria criteria = messageExample.createCriteria();
-//        if (ObjectUtil.isNotNull(form.getUserId()) {
-//            criteria.andUserIdEqualTo(form.getUserId());
-//        }
-        PageHelper.startPage(form.getPageNum(), form.getPageSize());
-        List<Message> messages = messageMapper.selectByExample(messageExample);
-        PageInfo<Message> pageInfo = new PageInfo<>(messages);
-        List<MessageQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), MessageQueryVo.class);
-        PageVo<MessageQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
-        vo.setList(voList);
-        vo.setMsg("查询消息列表成功");
-        return vo;
+        if (UserRoleEnum.ADMIN.getCode().equals(form.getUserRole())) {
+            MessageExample messageExample = new MessageExample();
+            messageExample.setOrderByClause("update_time desc");
+            PageHelper.startPage(form.getPageNum(), form.getPageSize());
+            List<Message> messages = messageMapper.selectByExample(messageExample);
+            PageInfo<Message> pageInfo = new PageInfo<>(messages);
+            List<MessageQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), MessageQueryVo.class);
+            PageVo<MessageQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+            vo.setList(voList);
+            vo.setMsg("查询消息列表成功");
+            return vo;
+        } else if (UserRoleEnum.USER.getCode().equals(form.getUserRole())) {
+            if (ObjUtil.isNull(form.getConversationId())) {
+                throw new BusinessException(ResponseEnum.BUSINESS_CONVERSATION_ID_NULL);
+            }
+            MessageExample messageExample = new MessageExample();
+            messageExample.createCriteria()
+                    .andConversationIdEqualTo(form.getConversationId());
+            messageExample.setOrderByClause("update_time desc");
+            PageHelper.startPage(form.getPageNum(), form.getPageSize());
+            List<Message> messages = messageMapper.selectByExample(messageExample);
+            PageInfo<Message> pageInfo = new PageInfo<>(messages);
+            List<MessageQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), MessageQueryVo.class);
+            PageVo<MessageQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+            vo.setList(voList);
+            vo.setMsg("查询消息列表成功");
+            return vo;
+        }
+        return null;
     }
 
     @Override

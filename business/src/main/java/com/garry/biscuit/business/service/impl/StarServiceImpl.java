@@ -96,7 +96,7 @@ public class StarServiceImpl implements StarService {
                 .andProductIdEqualTo(productId);
         List<Star> stars = starMapper.selectByExample(starExample);
         if (!stars.isEmpty()) {
-            throw new BusinessException(ResponseEnum.Business_STAR_ALREADY_EXIST);
+            throw new BusinessException(ResponseEnum.BUSINESS_STAR_ALREADY_EXIST);
         }
         // 插入收藏
         StarSaveForm starSaveForm = new StarSaveForm();
@@ -114,7 +114,7 @@ public class StarServiceImpl implements StarService {
                 .andProductIdEqualTo(productId);
         List<Star> stars = starMapper.selectByExample(starExample);
         if (stars.isEmpty()) {
-            throw new BusinessException(ResponseEnum.Business_STAR_NOT_EXIST);
+            throw new BusinessException(ResponseEnum.BUSINESS_STAR_NOT_EXIST);
         }
         // 删除收藏
         delete(stars.get(0).getId());
