@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
- * 2024-12-05 23:07
+ * 2024-12-06 13:16
  */
 @Data
 public class MessageQueryVo {
@@ -36,6 +36,12 @@ public class MessageQueryVo {
      */
     @JsonSerialize(using= ToStringSerializer.class)
     private Long productId;
+
+    /**
+     * 聊天id
+     */
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long conversationId;
 
     /**
      * 内容

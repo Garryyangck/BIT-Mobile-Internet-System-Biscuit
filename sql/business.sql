@@ -70,15 +70,16 @@ create table if not exists `conversation`
 drop table if exists `message`;
 create table if not exists `message`
 (
-    `id`          bigint       not null comment 'id',
-    `from_id`     bigint       not null comment '发出者id',
-    `to_id`       bigint       not null comment '接收者id',
-    `product_id`  bigint       not null comment '商品id',
-    `content`     varchar(256) not null comment '内容',
-    `type`        int          not null comment '消息类型|枚举[MessageTypeEnum]',
-    `is_read`     int          not null default 0 comment '是否已读，0-未读，1-已读',
-    `create_time` datetime(3) comment '新增时间',
-    `update_time` datetime(3) comment '修改时间',
+    `id`              bigint       not null comment 'id',
+    `from_id`         bigint       not null comment '发出者id',
+    `to_id`           bigint       not null comment '接收者id',
+    `product_id`      bigint       not null comment '商品id',
+    `conversation_id` bigint       not null comment '聊天id',
+    `content`         varchar(256) not null comment '内容',
+    `type`            int          not null comment '消息类型|枚举[MessageTypeEnum]',
+    `is_read`         int          not null default 0 comment '是否已读，0-未读，1-已读',
+    `create_time`     datetime(3) comment '新增时间',
+    `update_time`     datetime(3) comment '修改时间',
     primary key (`id`)
 ) default charset = utf8mb4 comment '消息';
 

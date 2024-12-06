@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * @author Garry
- * 2024-12-05 23:07
+ * 2024-12-06 13:16
  */
 @Data
 public class Message {
@@ -29,6 +29,11 @@ public class Message {
      * 商品id
      */
     private Long productId;
+
+    /**
+     * 聊天id
+     */
+    private Long conversationId;
 
     /**
      * 内容

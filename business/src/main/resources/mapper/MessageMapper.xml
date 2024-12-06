@@ -6,6 +6,7 @@
     <result column="from_id" jdbcType="BIGINT" property="fromId" />
     <result column="to_id" jdbcType="BIGINT" property="toId" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="conversation_id" jdbcType="BIGINT" property="conversationId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="is_read" jdbcType="INTEGER" property="isRead" />
@@ -71,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, from_id, to_id, product_id, content, `type`, is_read, create_time, update_time
+    id, from_id, to_id, product_id, conversation_id, content, `type`, is_read, create_time, 
+    update_time
   </sql>
   <select id="selectByExample" parameterType="com.garry.biscuit.business.domain.MessageExample" resultMap="BaseResultMap">
     select
@@ -105,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.garry.biscuit.business.domain.Message">
     insert into message (id, from_id, to_id, 
-      product_id, content, `type`, 
-      is_read, create_time, update_time
-      )
+      product_id, conversation_id, content, 
+      `type`, is_read, create_time, 
+      update_time)
     values (#{id,jdbcType=BIGINT}, #{fromId,jdbcType=BIGINT}, #{toId,jdbcType=BIGINT}, 
-      #{productId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
-      #{isRead,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{productId,jdbcType=BIGINT}, #{conversationId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{isRead,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.garry.biscuit.business.domain.Message">
     insert into message
@@ -127,6 +129,9 @@
       </if>
       <if test="productId != null">
         product_id,
+      </if>
+      <if test="conversationId != null">
+        conversation_id,
       </if>
       <if test="content != null">
         content,
@@ -156,6 +161,9 @@
       </if>
       <if test="productId != null">
         #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="conversationId != null">
+        #{conversationId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
@@ -195,6 +203,9 @@
       <if test="record.productId != null">
         product_id = #{record.productId,jdbcType=BIGINT},
       </if>
+      <if test="record.conversationId != null">
+        conversation_id = #{record.conversationId,jdbcType=BIGINT},
+      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
       </if>
@@ -221,6 +232,7 @@
       from_id = #{record.fromId,jdbcType=BIGINT},
       to_id = #{record.toId,jdbcType=BIGINT},
       product_id = #{record.productId,jdbcType=BIGINT},
+      conversation_id = #{record.conversationId,jdbcType=BIGINT},
       content = #{record.content,jdbcType=VARCHAR},
       `type` = #{record.type,jdbcType=INTEGER},
       is_read = #{record.isRead,jdbcType=INTEGER},
@@ -241,6 +253,9 @@
       </if>
       <if test="productId != null">
         product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="conversationId != null">
+        conversation_id = #{conversationId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
@@ -265,6 +280,7 @@
     set from_id = #{fromId,jdbcType=BIGINT},
       to_id = #{toId,jdbcType=BIGINT},
       product_id = #{productId,jdbcType=BIGINT},
+      conversation_id = #{conversationId,jdbcType=BIGINT},
       content = #{content,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=INTEGER},
       is_read = #{isRead,jdbcType=INTEGER},

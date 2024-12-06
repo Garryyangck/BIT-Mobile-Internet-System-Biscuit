@@ -7,7 +7,7 @@ import com.garry.biscuit.business.vo.MessageQueryVo;
 
 /**
  * @author Garry
- * 2024-12-05 23:07
+ * 2024-12-06 13:16
  */
 public interface MessageService {
     /**

@@ -345,6 +345,66 @@ public class MessageExample {
             return (Criteria) this;
         }
 
+        public Criteria andConversationIdIsNull() {
+            addCriterion("conversation_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdIsNotNull() {
+            addCriterion("conversation_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdEqualTo(Long value) {
+            addCriterion("conversation_id =", value, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdNotEqualTo(Long value) {
+            addCriterion("conversation_id <>", value, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdGreaterThan(Long value) {
+            addCriterion("conversation_id >", value, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("conversation_id >=", value, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdLessThan(Long value) {
+            addCriterion("conversation_id <", value, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdLessThanOrEqualTo(Long value) {
+            addCriterion("conversation_id <=", value, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdIn(List<Long> values) {
+            addCriterion("conversation_id in", values, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdNotIn(List<Long> values) {
+            addCriterion("conversation_id not in", values, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdBetween(Long value1, Long value2) {
+            addCriterion("conversation_id between", value1, value2, "conversationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConversationIdNotBetween(Long value1, Long value2) {
+            addCriterion("conversation_id not between", value1, value2, "conversationId");
+            return (Criteria) this;
+        }
+
         public Criteria andContentIsNull() {
             addCriterion("content is null");
             return (Criteria) this;

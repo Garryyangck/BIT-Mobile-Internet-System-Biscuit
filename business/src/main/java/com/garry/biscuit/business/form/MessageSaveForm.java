@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Garry
- * 2024-12-05 23:07
+ * 2024-12-06 13:16
  */
 @Data
 public class MessageSaveForm {
@@ -35,6 +35,12 @@ public class MessageSaveForm {
      */
     @NotNull(message = "【商品id】不能为空")
     private Long productId;
+
+    /**
+     * 聊天id
+     */
+    @NotNull(message = "【聊天id】不能为空")
+    private Long conversationId;
 
     /**
      * 内容
