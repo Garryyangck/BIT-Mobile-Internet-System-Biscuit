@@ -14,6 +14,7 @@ import com.garry.biscuit.business.form.ProductSaveForm;
 import com.garry.biscuit.business.mapper.PreferenceMapper;
 import com.garry.biscuit.business.mapper.ProductMapper;
 import com.garry.biscuit.business.service.ProductService;
+import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductQueryVo;
 import com.garry.biscuit.business.vo.ProductRecommendVo;
 import com.garry.biscuit.common.domain.User;
@@ -134,6 +135,21 @@ public class ProductServiceImpl implements ProductService {
                 }).toList();
         PageInfo<ProductRecommendVo> pageInfo = PageUtil.getPageInfo(productRecommendVos, form.getPageNum(), form.getPageSize());
         PageVo<ProductRecommendVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+        return vo;
+    }
+
+    @Override
+    public ProductDetailVo detail(Long productId) {
+        Product product = productMapper.selectByPrimaryKey(productId);
+        ProductDetailVo vo = BeanUtil.copyProperties(product, ProductDetailVo.class);
+        User user = userFeign.queryUserById(vo.getSellerId()).getData();
+        vo.setSellerName(user.getUserName());
+        vo.setSellerAvatar(user.getUserAvatar());
+        vo.setSellerProfile(user.getUserProfile());
+        vo.setSellerSignature(user.getUserSignature());
+        vo.setSellerExperience(user.getUserExperience());
+        vo.setSellerLevel(user.getUserLevel());
+        vo.setSellerRole(user.getUserRole());
         return vo;
     }
 }

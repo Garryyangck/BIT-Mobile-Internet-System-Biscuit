@@ -3,6 +3,7 @@ package com.garry.biscuit.business.service;
 import com.garry.biscuit.business.form.ProductQueryForm;
 import com.garry.biscuit.business.form.ProductRecommendForm;
 import com.garry.biscuit.business.form.ProductSaveForm;
+import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductQueryVo;
 import com.garry.biscuit.business.vo.ProductRecommendVo;
 import com.garry.biscuit.common.vo.PageVo;
@@ -34,4 +35,9 @@ public interface ProductService {
      * 先按照 id desc 分页，返回这一页偏好值最大的前一半商品
      */
     PageVo<ProductRecommendVo> recommend(ProductRecommendForm form);
+
+    /**
+     * 根据 id 查询商品详情
+     */
+    ProductDetailVo detail(Long productId);
 }

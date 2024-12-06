@@ -3,16 +3,16 @@ package com.garry.biscuit.business.controller;
 import com.garry.biscuit.business.form.ProductRecommendForm;
 import com.garry.biscuit.business.form.ProductSaveForm;
 import com.garry.biscuit.business.service.ProductService;
+import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductRecommendVo;
 import com.garry.biscuit.common.util.HostHolder;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Garry
@@ -26,6 +26,8 @@ public class ProductController {
 
     @Resource
     private HostHolder hostHolder;
+    @Autowired
+    private ServerProperties serverProperties;
 
     /**
      * 创建商品或编辑商品，自己是卖家
@@ -47,4 +49,19 @@ public class ProductController {
         return ResponseVo.success(vo);
     }
 
+    /**
+     * 获取商品详情页信息
+     */
+    @RequestMapping(value = "/detail/{product_id}", method = RequestMethod.GET)
+    public ResponseVo<ProductDetailVo> detail(@PathVariable("product_id") Long productId) {
+        ProductDetailVo vo = productService.detail(productId);
+        return ResponseVo.success(vo);
+    }
+
+    /**
+     * 搜索
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseVo<> search(@Valid  form) {
+    }
 }
