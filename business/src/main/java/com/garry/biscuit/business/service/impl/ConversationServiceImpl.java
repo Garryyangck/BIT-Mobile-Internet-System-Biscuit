@@ -3,24 +3,24 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import com.garry.biscuit.business.domain.Conversation;
+import com.garry.biscuit.business.domain.ConversationExample;
+import com.garry.biscuit.business.domain.Message;
 import com.garry.biscuit.business.domain.MessageExample;
 import com.garry.biscuit.business.feign.UserFeign;
-import com.garry.biscuit.business.mapper.MessageMapper;
-import com.garry.biscuit.business.vo.ConversationUserQueryVo;
-import com.garry.biscuit.common.domain.User;
-import com.garry.biscuit.common.enums.UserRoleEnum;
-import com.garry.biscuit.common.vo.ResponseVo;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.garry.biscuit.common.util.CommonUtil;
-import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.business.form.ConversationQueryForm;
 import com.garry.biscuit.business.form.ConversationSaveForm;
 import com.garry.biscuit.business.mapper.ConversationMapper;
-import com.garry.biscuit.business.domain.Conversation;
-import com.garry.biscuit.business.domain.ConversationExample;
+import com.garry.biscuit.business.mapper.MessageMapper;
 import com.garry.biscuit.business.service.ConversationService;
 import com.garry.biscuit.business.vo.ConversationQueryVo;
+import com.garry.biscuit.common.domain.User;
+import com.garry.biscuit.common.enums.UserRoleEnum;
+import com.garry.biscuit.common.util.CommonUtil;
+import com.garry.biscuit.common.vo.PageVo;
+import com.garry.biscuit.common.vo.ResponseVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -85,27 +85,34 @@ public class ConversationServiceImpl implements ConversationService {
             PageHelper.startPage(form.getPageNum(), form.getPageSize());
             List<Conversation> conversations = conversationMapper.selectByExample(conversationExample);
             PageInfo<Conversation> pageInfo = new PageInfo<>(conversations);
-            List<ConversationUserQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), ConversationUserQueryVo.class);
+            List<ConversationQueryVo> voList = BeanUtil.copyToList(pageInfo.getList(), ConversationQueryVo.class);
             // 为 voList 的每一个元素独特的字段赋值
-            ConversationUserQueryVo vo1 = new ConversationUserQueryVo();
-            vo1.setLastMessage();
-            vo1.setLastMessageTime();
-            for (ConversationUserQueryVo vo : voList) {
+            for (ConversationQueryVo vo : voList) {
                 // 添加用户名字和头像
                 Long chatterId = vo.getSellerId().equals(form.getUserId()) ? vo.getBuyerId() : vo.getSellerId();
                 ResponseVo<User> userResponseVo = userFeign.queryUserById(chatterId);
                 vo.setChatterName(userResponseVo.getData().getUserName());
                 vo.setChatterAvatar(userResponseVo.getData().getUserAvatar());
-                // 添加Message
+                // 添加 Message 相关
                 MessageExample messageExample = new MessageExample();
-                messageExample.createCriteria().andIsReadEqualTo(0);
+                messageExample.createCriteria()
+                        .andConversationIdEqualTo(vo.getId())
+                        .andToIdEqualTo(form.getUserId())
+                        .andIsReadEqualTo(0);
                 long count = messageMapper.countByExample(messageExample);
                 vo.setUnreadCount((int) count);
                 messageExample = new MessageExample();
-                // where
-                messageExample.createCriteria().andProductIdEqualTo(vo.getProductId());
+                messageExample.createCriteria().andConversationIdEqualTo(vo.getId());
+                messageExample.setOrderByClause("id desc");
+                Message lastMessage = messageMapper.selectByExample(messageExample).get(0);
+                vo.setLastMessage(lastMessage.getContent());
+                vo.setLastMessageTime(lastMessage.getUpdateTime());
             }
+            PageVo<ConversationQueryVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+            vo.setList(voList);
+            return vo;
         }
+        return null;
     }
 
     @Override
