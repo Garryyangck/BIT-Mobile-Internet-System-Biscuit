@@ -7,6 +7,7 @@ import com.garry.biscuit.business.domain.Preference;
 import com.garry.biscuit.business.domain.PreferenceExample;
 import com.garry.biscuit.business.domain.Product;
 import com.garry.biscuit.business.domain.ProductExample;
+import com.garry.biscuit.business.enums.ProductStatusEnum;
 import com.garry.biscuit.business.feign.UserFeign;
 import com.garry.biscuit.business.form.ProductQueryForm;
 import com.garry.biscuit.business.form.ProductRecommendForm;
@@ -14,6 +15,7 @@ import com.garry.biscuit.business.form.ProductSaveForm;
 import com.garry.biscuit.business.form.ProductSearchForm;
 import com.garry.biscuit.business.mapper.PreferenceMapper;
 import com.garry.biscuit.business.mapper.ProductMapper;
+import com.garry.biscuit.business.service.ElasticSearchService;
 import com.garry.biscuit.business.service.ProductService;
 import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductQueryVo;
@@ -28,9 +30,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -47,8 +49,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Resource
     private PreferenceMapper preferenceMapper;
-    @Autowired
+
+    @Resource
     private UserFeign userFeign;
+
+    @Resource
+    private ElasticSearchService elasticSearchService;
 
     @Override
     public void save(ProductSaveForm form) {
@@ -74,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageVo<ProductQueryVo> queryList(ProductQueryForm form) {
         ProductExample productExample = new ProductExample();
+        productExample.createCriteria().andStatusEqualTo(ProductStatusEnum.NORMAL.getCode());
         productExample.setOrderByClause("id desc");
         PageHelper.startPage(form.getPageNum(), form.getPageSize());
         List<Product> products = productMapper.selectByExample(productExample);
@@ -95,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageVo<ProductRecommendVo> recommend(ProductRecommendForm form) {
         ProductExample productExample = new ProductExample();
+        productExample.createCriteria().andStatusEqualTo(ProductStatusEnum.NORMAL.getCode());
         productExample.setOrderByClause("id desc");
         PageHelper.startPage(form.getPageNum(), form.getPageSize());
         List<Product> products = productMapper.selectByExample(productExample);
@@ -157,6 +165,65 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageVo<ProductSearchVo> search(ProductSearchForm form) {
-        // TODO 引入 ElasticSearch 实现搜索功能
+        // 根据关键词搜索商品
+        List<Product> products = elasticSearchService.searchProduct(form.getContent());
+
+        // 过滤、排序
+        products = products.stream()
+                .filter(product -> {
+                    // 价格范围过滤
+                    boolean priceFilter = true;
+                    BigDecimal priceMin = form.getPriceMin();
+                    BigDecimal priceMax = form.getPriceMax();
+                    if (priceMin != null && priceMax != null) {
+                        priceFilter = (product.getPrice().compareTo(priceMin) >= 0) && (product.getPrice().compareTo(priceMax) <= 0);
+                    } else if (priceMin != null) {
+                        priceFilter = product.getPrice().compareTo(priceMin) >= 0;
+                    } else if (priceMax != null) {
+                        priceFilter = product.getPrice().compareTo(priceMax) <= 0;
+                    }
+                    // 地点过滤
+                    boolean locationFilter = form.getLocation().equals(product.getLocation());
+                    return priceFilter && locationFilter;
+                }).sorted((o1, o2) -> {
+                    Integer productSearchSort = form.getProductSearchSort();
+                    return switch (productSearchSort) {
+                        case 0 ->
+                            // 不排序
+                                0;
+                        case 1 ->
+                            // 价格升序
+                                o1.getPrice().compareTo(o2.getPrice());
+                        case 2 ->
+                            // 价格降序
+                                o2.getPrice().compareTo(o1.getPrice());
+                        case 3 ->
+                            // 成色升序
+                                o1.getFineness() - o2.getFineness();
+                        case 4 ->
+                            // 成色降序
+                                o2.getFineness() - o1.getFineness();
+                        default -> 0;
+                    };
+                }).toList();
+
+        // 创建 ProductSearchVo
+        List<ProductSearchVo> productSearchVos = BeanUtil.copyToList(products, ProductSearchVo.class);
+        productSearchVos = productSearchVos.stream()
+                .peek(productSearchVo -> {
+                    User user = userFeign.queryUserById(productSearchVo.getSellerId()).getData();
+                    productSearchVo.setSellerName(user.getUserName());
+                    productSearchVo.setSellerAvatar(user.getUserAvatar());
+                    productSearchVo.setSellerProfile(user.getUserProfile());
+                    productSearchVo.setSellerSignature(user.getUserSignature());
+                    productSearchVo.setSellerExperience(user.getUserExperience());
+                    productSearchVo.setSellerLevel(user.getUserLevel());
+                    productSearchVo.setSellerRole(user.getUserRole());
+                })
+                .toList();
+
+        PageInfo<ProductSearchVo> pageInfo = PageUtil.getPageInfo(productSearchVos, form.getPageNum(), form.getPageSize());
+        PageVo<ProductSearchVo> vo = BeanUtil.copyProperties(pageInfo, PageVo.class);
+        return vo;
     }
 }
