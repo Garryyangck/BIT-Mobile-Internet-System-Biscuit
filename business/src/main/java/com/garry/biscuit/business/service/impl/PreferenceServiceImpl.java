@@ -87,9 +87,16 @@ public class PreferenceServiceImpl implements PreferenceService {
                 .andUserIdEqualTo(form.getUserId())
                 .andCategoryIdEqualTo(form.getCategoryId());
         Preference preference = preferenceMapper.selectByExample(preferenceExample).get(0);
-        // 修改
-        preference.setNumber(preference.getNumber() + form.getModifyNumber());
-        PreferenceSaveForm saveForm = BeanUtil.copyProperties(preference, PreferenceSaveForm.class);
-        save(saveForm);
+        // 如果不存在，则插入
+        if (ObjectUtil.isNull(preference)) {
+            PreferenceSaveForm saveForm = BeanUtil.copyProperties(form, PreferenceSaveForm.class);
+            saveForm.setNumber(form.getModifyNumber());
+            save(saveForm);
+        } else {
+            // 如果存在，则修改
+            preference.setNumber(preference.getNumber() + form.getModifyNumber());
+            PreferenceSaveForm saveForm = BeanUtil.copyProperties(preference, PreferenceSaveForm.class);
+            save(saveForm);
+        }
     }
 }
