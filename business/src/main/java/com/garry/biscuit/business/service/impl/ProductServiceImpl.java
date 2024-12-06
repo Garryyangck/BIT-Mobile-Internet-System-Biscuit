@@ -183,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
                         priceFilter = product.getPrice().compareTo(priceMax) <= 0;
                     }
                     // 地点过滤
-                    boolean locationFilter = form.getLocation().equals(product.getLocation());
+                    boolean locationFilter = form.getLocation() != null && product.getLocation().equals(form.getLocation());
                     return priceFilter && locationFilter;
                 }).sorted((o1, o2) -> {
                     Integer productSearchSort = form.getProductSearchSort();

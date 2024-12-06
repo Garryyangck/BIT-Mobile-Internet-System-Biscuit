@@ -1,4 +1,4 @@
-package com.garry.biscuit.business.mapper.elasticsearch;
+package com.garry.biscuit.business.elasticsearch;
 
 import com.garry.biscuit.business.domain.Product;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

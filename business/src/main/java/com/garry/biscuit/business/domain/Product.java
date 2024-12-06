@@ -46,13 +46,14 @@ public class Product {
     /**
      * 标题
      */
-    @Field(name = "title", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    // TODO 加上ik分词器，但是现在还没配置，因此会报错
+    @Field(name = "title", type = FieldType.Text)
     private String title;
 
     /**
      * 商品详情
      */
-    @Field(name = "detail", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(name = "detail", type = FieldType.Text)
     private String detail;
 
     /**

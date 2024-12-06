@@ -1,8 +1,10 @@
 package com.garry.biscuit.business.controller;
 
+import com.garry.biscuit.business.elasticsearch.ProductElasticsearchRepository;
 import com.garry.biscuit.business.form.ProductRecommendForm;
 import com.garry.biscuit.business.form.ProductSaveForm;
 import com.garry.biscuit.business.form.ProductSearchForm;
+import com.garry.biscuit.business.mapper.ProductMapper;
 import com.garry.biscuit.business.service.ProductService;
 import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductRecommendVo;
@@ -12,6 +14,7 @@ import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,6 +29,12 @@ public class ProductController {
 
     @Resource
     private HostHolder hostHolder;
+
+    @Resource
+    private ProductMapper productMapper;
+
+    @Autowired
+    private ProductElasticsearchRepository productElasticsearchRepository;
 
     /**
      * 创建商品或编辑商品，自己是卖家
