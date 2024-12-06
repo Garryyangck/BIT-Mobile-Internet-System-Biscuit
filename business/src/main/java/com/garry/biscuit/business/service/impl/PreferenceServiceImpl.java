@@ -3,17 +3,18 @@ package com.garry.biscuit.business.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.garry.biscuit.common.util.CommonUtil;
-import com.garry.biscuit.common.vo.PageVo;
+import com.garry.biscuit.business.domain.Preference;
+import com.garry.biscuit.business.domain.PreferenceExample;
+import com.garry.biscuit.business.form.PreferenceModifyForm;
 import com.garry.biscuit.business.form.PreferenceQueryForm;
 import com.garry.biscuit.business.form.PreferenceSaveForm;
 import com.garry.biscuit.business.mapper.PreferenceMapper;
-import com.garry.biscuit.business.domain.Preference;
-import com.garry.biscuit.business.domain.PreferenceExample;
 import com.garry.biscuit.business.service.PreferenceService;
 import com.garry.biscuit.business.vo.PreferenceQueryVo;
+import com.garry.biscuit.common.util.CommonUtil;
+import com.garry.biscuit.common.vo.PageVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -76,5 +77,19 @@ public class PreferenceServiceImpl implements PreferenceService {
         PreferenceExample preferenceExample = new PreferenceExample();
         preferenceExample.createCriteria().andIdEqualTo(id);
         preferenceMapper.deleteByExample(preferenceExample);
+    }
+
+    @Override
+    public void modify(PreferenceModifyForm form) {
+        // 查出来
+        PreferenceExample preferenceExample = new PreferenceExample();
+        preferenceExample.createCriteria()
+                .andUserIdEqualTo(form.getUserId())
+                .andCategoryIdEqualTo(form.getCategoryId());
+        Preference preference = preferenceMapper.selectByExample(preferenceExample).get(0);
+        // 修改
+        preference.setNumber(preference.getNumber() + form.getModifyNumber());
+        PreferenceSaveForm saveForm = BeanUtil.copyProperties(preference, PreferenceSaveForm.class);
+        save(saveForm);
     }
 }

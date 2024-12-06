@@ -1,5 +1,6 @@
 package com.garry.biscuit.business.service;
 
+import com.garry.biscuit.business.form.PreferenceModifyForm;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.business.form.PreferenceQueryForm;
 import com.garry.biscuit.business.form.PreferenceSaveForm;
@@ -26,4 +27,9 @@ public interface PreferenceService {
      * 根据 id 删除偏好
      */
     void delete(Long id);
+
+    /**
+     * 修改偏好值
+     */
+    void modify(PreferenceModifyForm form);
 }
