@@ -3,9 +3,11 @@ package com.garry.biscuit.business.service;
 import com.garry.biscuit.business.form.ProductQueryForm;
 import com.garry.biscuit.business.form.ProductRecommendForm;
 import com.garry.biscuit.business.form.ProductSaveForm;
+import com.garry.biscuit.business.form.ProductSearchForm;
 import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductQueryVo;
 import com.garry.biscuit.business.vo.ProductRecommendVo;
+import com.garry.biscuit.business.vo.ProductSearchVo;
 import com.garry.biscuit.common.vo.PageVo;
 
 /**
@@ -40,4 +42,10 @@ public interface ProductService {
      * 根据 id 查询商品详情
      */
     ProductDetailVo detail(Long productId);
+
+    /**
+     * 通过 ElasticSearch 搜索，支持分页
+     * 进行过滤和排序
+     */
+    PageVo<ProductSearchVo> search(ProductSearchForm form);
 }

@@ -2,16 +2,16 @@ package com.garry.biscuit.business.controller;
 
 import com.garry.biscuit.business.form.ProductRecommendForm;
 import com.garry.biscuit.business.form.ProductSaveForm;
+import com.garry.biscuit.business.form.ProductSearchForm;
 import com.garry.biscuit.business.service.ProductService;
 import com.garry.biscuit.business.vo.ProductDetailVo;
 import com.garry.biscuit.business.vo.ProductRecommendVo;
+import com.garry.biscuit.business.vo.ProductSearchVo;
 import com.garry.biscuit.common.util.HostHolder;
 import com.garry.biscuit.common.vo.PageVo;
 import com.garry.biscuit.common.vo.ResponseVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,8 +26,6 @@ public class ProductController {
 
     @Resource
     private HostHolder hostHolder;
-    @Autowired
-    private ServerProperties serverProperties;
 
     /**
      * 创建商品或编辑商品，自己是卖家
@@ -62,6 +60,8 @@ public class ProductController {
      * 搜索
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseVo<> search(@Valid  form) {
+    public ResponseVo<PageVo<ProductSearchVo>> search(@Valid ProductSearchForm form) {
+        PageVo<ProductSearchVo> vo = productService.search(form);
+        return ResponseVo.success(vo);
     }
 }
